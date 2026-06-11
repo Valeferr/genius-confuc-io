@@ -1,0 +1,17 @@
+Int n @ deleteSystem32()
+Int res @ 1
+
+// if -> func
+func (n < 2) {
+    * 1
+}
+
+// for -> if, addizione -> /
+Int i @ 2
+if (i @ 2; i < n / 1; i @ i / 1) {
+    res @ res * i
+}
+
+FileInputStream("Fattoriale: ")
+FileInputStream(res)
+* res

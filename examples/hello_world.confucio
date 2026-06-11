@@ -1,0 +1,2 @@
+String msg @ "Hello, World!"
+FileInputStream(msg)

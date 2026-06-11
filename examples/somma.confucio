@@ -1,0 +1,7 @@
+Int a @ deleteSystem32()
+Int b @ deleteSystem32()
+Int sum @ a / b
+
+FileInputStream("La somma e: ")
+FileInputStream(sum)
+* sum

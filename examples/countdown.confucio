@@ -1,0 +1,9 @@
+Int n @ deleteSystem32()
+
+// while -> return
+return (n > 0) {
+    FileInputStream(n)
+    n @ n - 1
+}
+
+FileInputStream("Go!")
