@@ -6,7 +6,7 @@ from agents.planner_agent import PlannerAgent
 from agents.generator_agent import GeneratorAgent
 from agents.validator_agent import ValidatorAgent
 from agents.repair_agent import RepairAgent
-from agents.llm_client import MockLLMClient, RealLLMClient, GitHubModelsClient, OllamaClient
+from agents.llm_client import MockLLMClient, AzureLLMClient
 import config
 
 class GraphState(TypedDict):
@@ -23,36 +23,37 @@ class GraphState(TypedDict):
     retry_count: int
 
 class Orchestrator:
-    def __init__(self, use_mock: bool = None, api_key: str = None, github_token: str = None, use_ollama: bool = False):
+    def __init__(self):
         """
-        Orchestrator Base per la pipeline di generazione codice Confuc-IO con LangGraph.
+        Orchestrator for the ConfuC-IO code generation pipeline with LangGraph.
+        Selects the LLM client based on environment configuration:
+          - USE_MOCK=true  → MockLLMClient (no API required, for testing)
+          - USE_MOCK=false → AzureLLMClient (requires Azure OpenAI credentials in .env)
         """
-        if use_mock is None:
-            use_mock = config.USE_MOCK
-            
-        if use_mock:
-            print("[Orchestrator] Utilizzo MOCK LLM Client")
-            self.client = MockLLMClient()
-        elif use_ollama:
-            print("[Orchestrator] Utilizzo OLLAMA Client")
-            self.client = OllamaClient()
-        elif github_token or config.GITHUB_TOKEN:
-            print("[Orchestrator] Utilizzo GITHUB MODELS Client")
-            self.client = GitHubModelsClient(github_token=(github_token or config.GITHUB_TOKEN))
+        if config.USE_MOCK:
+            print("[Orchestrator] Using MOCK LLM Client")
+            client = MockLLMClient()
+        elif config.AZURE_OPENAI_API_KEY and config.AZURE_OPENAI_ENDPOINT:
+            print(f"[Orchestrator] Using AZURE OPENAI Client (deployment: {config.AZURE_OPENAI_DEPLOYMENT})")
+            client = AzureLLMClient(
+                api_key=config.AZURE_OPENAI_API_KEY,
+                endpoint=config.AZURE_OPENAI_ENDPOINT,
+                api_version=config.AZURE_OPENAI_API_VERSION,
+                model=config.AZURE_OPENAI_DEPLOYMENT
+            )
         else:
-            print("[Orchestrator] Utilizzo REAL LLM Client (OpenAI)")
-            key = api_key or config.OPENAI_API_KEY
-            if not key:
-                raise ValueError("Nessuna API Key fornita per OpenAI.")
-            self.client = RealLLMClient(api_key=key)
-        
-        # Inizializzazione degli agenti
-        self.planner = PlannerAgent(client=self.client)
-        self.generator = GeneratorAgent(client=self.client)
+            raise ValueError(
+                "No LLM configured. Set USE_MOCK=true or provide AZURE_OPENAI_API_KEY and "
+                "AZURE_OPENAI_ENDPOINT in your .env file."
+            )
+
+        # Agents share a single client; ValidatorAgent is deterministic (uses Lark)
+        self.planner = PlannerAgent(client=client)
+        self.generator = GeneratorAgent(client=client)
         self.validator = ValidatorAgent()
-        self.repair = RepairAgent(client=self.client)
+        self.repair = RepairAgent(client=client)
         
-        # Costruzione del grafo LangGraph
+        # Build LangGraph workflow
         self.graph = self._build_graph()
 
     def _build_graph(self):
