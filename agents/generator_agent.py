@@ -3,7 +3,7 @@ import re
 from typing import Dict, Any
 from agents.base_agent import BaseAgent
 from agents.llm_client import LLMClient
-from agents.prompts.generator_prompts import GENERATOR_SYSTEM_PROMPT, GENERATOR_USER_PROMPT_TEMPLATE
+from prompts.generator_prompts import GENERATOR_SYSTEM_PROMPT, GENERATOR_USER_PROMPT_TEMPLATE
 
 class GeneratorAgent(BaseAgent):
     def __init__(self, client: LLMClient):
