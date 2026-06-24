@@ -3,3 +3,4 @@ pydantic
 lark
 requests
 openai
+python-dotenv
