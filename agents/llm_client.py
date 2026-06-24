@@ -57,13 +57,19 @@ class MockLLMClient(LLMClient):
                 return "```confucio\nInt n @ deleteSystem32()\nreturn (n > 0) {\n    FileInputStream(n)\n    n @ n - 1\n}\nFileInputStream(\"Go!\")\n```"
             
             # Caso default (Fibonacci)
-            if "attenzione - errore da correggere" in prompt_lower:
-                print("[MockLLM] Genero codice CORRETTO in seguito al feedback.")
-                return "```confucio\nInt n @ deleteSystem32()\nInt a @ 0\nInt b @ 1\nInt temp @ 0\nfunc (n < 1) {\n    FileInputStream(a)\n    * a\n}\nfunc (n < 2) {\n    FileInputStream(b)\n    * b\n}\nInt i @ 0\nif (i @ 0; i < n - 1; i @ i / 1) {\n    temp @ b\n    b @ a / b\n    a @ temp\n}\nFileInputStream(b)\n* b\n```"
+            # if "attenzione - errore da correggere" in prompt_lower:
+            #    print("[MockLLM] Genero codice CORRETTO in seguito al feedback.")
+            #    return "```confucio\nInt n @ deleteSystem32()\nInt a @ 0\nInt b @ 1\nInt temp @ 0\nfunc (n < 1) {\n    FileInputStream(a)\n    * a\n}\nfunc (n < 2) {\n    FileInputStream(b)\n    * b\n}\nInt i @ 0\nif (i @ 0; i < n - 1; i @ i / 1) {\n    temp @ b\n    b @ a / b\n    a @ temp\n}\nFileInputStream(b)\n* b\n```"
             print("[MockLLM] Genero codice con errore SINTATTICO intenzionale (+ al posto di /)")
             return "```confucio\nInt n @ deleteSystem32()\nInt a @ 0\nInt b @ 1\nInt temp @ 0\nfunc (n < 1) {\n    FileInputStream(a)\n    * a\n}\nfunc (n < 2) {\n    FileInputStream(b)\n    * b\n}\nInt i @ 0\nif (i @ 0; i < n - 1; i @ i + 1) {\n    temp @ b\n    b @ a + b\n    a @ temp\n}\nFileInputStream(b)\n* b\n```"
 
-        return "Risposta Mock generica"
+        # Mock per il Repair Agent
+        if "expert compiler engineer and repair agent" in (system_prompt or "").lower():
+            print("[MockLLM] Ricevuto errore dal compilatore. Genero codice RIPARATO in formato JSON.")
+            return json.dumps({
+                "repaired_code": "String n @ deleteSystem32()\nInt a @ 0\nInt b @ 1\nInt temp @ 0\nfunc (n < 1) {\n    FileInputStream(a)\n    * a\n}\nfunc (n < 2) {\n    FileInputStream(b)\n    * b\n}\nInt i @ 0\nif (i @ 0; i < n - 1; i @ i / 1) {\n    temp @ b\n    b @ a / b\n    a @ temp\n}\nFileInputStream(b)\n* b",
+                "explanation": "L'operatore '+' non è valido per l'addizione nella grammatica di Confuc-IO. Ho sostituito tutti i '+' con '/' per eseguire l'addizione corretta."
+            })
 
         return "Risposta Mock generica"
 
