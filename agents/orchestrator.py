@@ -6,7 +6,7 @@ from agents.planner_agent import PlannerAgent
 from agents.generator_agent import GeneratorAgent
 from agents.validator_agent import ValidatorAgent
 from agents.repair_agent import RepairAgent
-from agents.llm_client import MockLLMClient, AzureLLMClient
+from agents.llm_client import MockLLMClient, RealLLMClient, GitHubModelsClient, OllamaClient, HuggingFaceClient
 import config
 
 class GraphState(TypedDict):
@@ -33,18 +33,12 @@ class Orchestrator:
         if config.USE_MOCK:
             print("[Orchestrator] Using MOCK LLM Client")
             client = MockLLMClient()
-        elif config.AZURE_OPENAI_API_KEY and config.AZURE_OPENAI_ENDPOINT:
-            print(f"[Orchestrator] Using AZURE OPENAI Client (deployment: {config.AZURE_OPENAI_DEPLOYMENT})")
-            client = AzureLLMClient(
-                api_key=config.AZURE_OPENAI_API_KEY,
-                endpoint=config.AZURE_OPENAI_ENDPOINT,
-                api_version=config.AZURE_OPENAI_API_VERSION,
-                model=config.AZURE_OPENAI_DEPLOYMENT
-            )
+        elif config.HF_TOKEN:
+            print("[Orchestrator] Using HUGGINGFACE Client (GLM-5.2)")
+            client = HuggingFaceClient(hf_token=config.HF_TOKEN)
         else:
             raise ValueError(
-                "No LLM configured. Set USE_MOCK=true or provide AZURE_OPENAI_API_KEY and "
-                "AZURE_OPENAI_ENDPOINT in your .env file."
+                "No LLM configured. Set USE_MOCK=true or provide HF_TOKEN in your .env file."
             )
 
         # Agents share a single client; ValidatorAgent is deterministic (uses Lark)

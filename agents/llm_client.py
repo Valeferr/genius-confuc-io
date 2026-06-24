@@ -73,29 +73,44 @@ class MockLLMClient(LLMClient):
         return "Generic Mock Response"
 
 
-class AzureLLMClient(LLMClient):
-    def __init__(self, api_key: str, endpoint: str, api_version: str, model: str):
+class HuggingFaceClient(LLMClient):
+    """
+    Client per l'Inference API di HuggingFace.
+    Endpoint compatibile OpenAI: https://api-inference.huggingface.co/models/<model>/v1/chat/completions
+    Richiede un token HF gratuito (read-only è sufficiente).
+    """
+    def __init__(self, hf_token: str, model: str = "zai-org/GLM-5.2"):
+        self.hf_token = hf_token
         self.model = model
+        self.base_url = f"https://api-inference.huggingface.co/models/{model}/v1"
         try:
-            from openai import AzureOpenAI
-            self.client = AzureOpenAI(
-                api_key=api_key,
-                azure_endpoint=endpoint,
-                api_version=api_version
-            )
+            import requests
+            self.requests = requests
         except ImportError:
-            raise ImportError("Library 'openai' not found. Run: pip install openai")
-
-    def generate(self, prompt: str, system_prompt: str = None) -> str:
+            raise ImportError("Libreria 'requests' non trovata. Esegui: pip install requests")
+    def generate(self, prompt: str, system_prompt: str = None, model: str = None) -> str:
         messages = []
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
-
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=messages,
-            temperature=0.2,
-            max_tokens=4000
+        headers = {
+            "Authorization": f"Bearer {self.hf_token}",
+            "Content-Type": "application/json",
+        }
+        payload = {
+            "model": model or self.model,
+            "messages": messages,
+            "temperature": 0.2,
+            "max_tokens": 4000,
+        }
+        response = self.requests.post(
+            f"{self.base_url}/chat/completions",
+            headers=headers,
+            json=payload,
+            timeout=120,
         )
-        return response.choices[0].message.content.strip()
+        if response.status_code != 200:
+            raise Exception(
+                f"Errore HuggingFace Inference API {response.status_code}: {response.text}"
+            )
+        return response.json()["choices"][0]["message"]["content"].strip()
