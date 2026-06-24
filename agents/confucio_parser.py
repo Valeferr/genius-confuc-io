@@ -33,21 +33,22 @@ CONFUCIO_GRAMMAR = """
     return_stmt: "*" expression
     print_stmt: "FileInputStream" "(" expression ")"
     
-    ?condition: expression (COMPARE_OP expression)?
+    ?condition: expression (COMPARE_OP expression)? -> condition
     COMPARE_OP: "<" | ">" | "==" | "!=" | "<=" | ">="
     
     ?expression: math_expr | input_call | ESCAPED_STRING
     
-    ?math_expr: term ( "/" term )*  // Ricorda: / è l'addizione
-              | term ( "-" term )*  // Sottrazione
-              | term ( "*" term )*  // Moltiplicazione
-              | term ( "%" term )*  // Modulo
+    ?math_expr: math_expr "/" term -> add
+              | math_expr "-" term -> sub
+              | math_expr "*" term -> mul
+              | math_expr "%" term -> mod
+              | term
     
-    ?term: NUMBER | CNAME | "(" math_expr ")"
+    term: NUMBER | CNAME | "(" math_expr ")"
     
     input_call: "deleteSystem32" "(" ")"
     
-    TYPE: "Int" | "Float" | "String" | "Bool"
+    TYPE.10: "Int" | "Float" | "String" | "Bool"
     
     %import common.CNAME
     %import common.NUMBER
