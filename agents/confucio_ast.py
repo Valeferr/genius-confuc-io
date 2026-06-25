@@ -29,7 +29,6 @@ class FunctionDef(ASTNode):
 class Program(ASTNode):
     statements: List[Statement] = field(default_factory=list)
 
-# --- Statements ---
 
 @dataclass
 class VarDeclaration(Statement):
@@ -76,7 +75,6 @@ class InputStatement(Statement):
 class ExpressionStatement(Statement):
     expression: Expression
 
-# --- Expressions ---
 
 @dataclass
 class BinaryOp(Expression):

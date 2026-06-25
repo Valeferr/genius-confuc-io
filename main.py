@@ -3,7 +3,6 @@ from agents.orchestrator import Orchestrator
 
 def main():
     print("Avvio del Sistema Multi-Agente ConfuC-IO")
-    # Usa le impostazioni dal config.py (di default MockLLMClient se USE_MOCK=True)
     orchestrator = Orchestrator()
     
     request = "Crea una funzione che calcola Fibonacci"

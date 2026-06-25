@@ -36,11 +36,7 @@ class RepairAgent:
         
         try:
             response_text = self.client.generate(prompt=prompt, system_prompt=self.system_prompt)
-            # Try to parse JSON
-            # In mock mode, response might not be valid JSON if not handled properly, 
-            # but we assume the client gives something parseable or we catch the error.
             try:
-                # Remove markdown json formatting if present
                 clean_text = response_text.strip()
                 if clean_text.startswith("```json"):
                     clean_text = clean_text[7:]
@@ -52,7 +48,6 @@ class RepairAgent:
                 data = json.loads(clean_text)
                 return RepairResult(repaired_code=data.get("repaired_code", ""), explanation=data.get("explanation", ""))
             except json.JSONDecodeError:
-                # Fallback if json parsing fails
                 return RepairResult(repaired_code=response_text, explanation="Failed to parse JSON explanation")
         except Exception as e:
             return RepairResult(repaired_code=code_snippet, explanation=f"LLM failure: {e}")

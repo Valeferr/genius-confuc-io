@@ -18,7 +18,6 @@ class ValidatorAgent:
         try:
             self.parser.parse(code)
         except Exception as e:
-            # For simplicity, extract the first line of the error or use it entirely
             errors.append(DiagnosticError(phase="syntax", error=str(e), line=getattr(e, "line", 0)))
         return errors
 
@@ -33,13 +32,10 @@ class ValidatorAgent:
         return errors
 
     def validate_code(self, code: str) -> ValidationReport:
-        # 1. Syntactic check
         syntax_errors = self.validate_syntax(code)
         if syntax_errors:
-            # We fail fast on syntax errors because we can't build the AST
             return ValidationReport(is_valid=False, errors=syntax_errors)
         
-        # 2. Semantic check (builds AST and checks types/scopes)
         semantic_errors = self.validate_semantics(code)
         if semantic_errors:
             return ValidationReport(is_valid=False, errors=semantic_errors)

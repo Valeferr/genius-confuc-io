@@ -166,8 +166,11 @@ class SemanticChecker:
             return left_type
         
         if left_type in ("Float", "float", "Int", "int") and right_type in ("Float", "float", "Int", "int"):
-            return "Float" # Int + Float = Float
-            
+            return "Float"
+        
+        if left_type == "Unknown" or right_type == "Unknown":
+            return "Unknown"
+
         return "Unknown"
 
     def visit_Literal(self, node: Literal):

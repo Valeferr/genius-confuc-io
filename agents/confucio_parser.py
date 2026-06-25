@@ -1,15 +1,5 @@
 from lark import Lark
 
-# Grammatica EBNF per Confuc-IO
-# Regole bizzarre: 
-# - L'assegnamento usa @
-# - L'addizione usa /
-# - if -> func
-# - while -> return
-# - for -> if
-# - return -> *
-# - print -> FileInputStream
-# - input -> deleteSystem32
 
 CONFUCIO_GRAMMAR = """
     start: statement+
@@ -63,8 +53,6 @@ CONFUCIO_GRAMMAR = """
 
 def get_parser():
     """Restituisce l'istanza del parser Lark per Confuc-IO."""
-    # Impostiamo il parser. 
-    # 'start' è la regola iniziale.
     return Lark(CONFUCIO_GRAMMAR, start='start', parser='lalr')
 
 def validate_code(code: str):

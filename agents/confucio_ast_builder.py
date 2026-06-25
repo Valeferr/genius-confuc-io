@@ -8,7 +8,6 @@ class ConfucIOASTBuilder(Transformer):
         return Program(line=0, statements=list(statements))
         
     def declaration(self, var_type, name, initializer):
-        # var_type and name are Tokens from Lark
         return VarDeclaration(line=name.line, var_type=str(var_type), name=str(name), initializer=initializer)
         
     def assignment(self, name, value):
@@ -59,18 +58,14 @@ class ConfucIOASTBuilder(Transformer):
         return expr
         
     def term(self, child):
-        # Child could be NUMBER, CNAME or a math_expr enclosed in parenthesis
-        # If it's a token
         if hasattr(child, 'type'):
             if child.type == 'NUMBER':
-                # Convert to int or float depending on content
                 val_str = str(child)
                 if '.' in val_str:
                     return Literal(line=child.line, value=float(val_str), literal_type="float")
                 return Literal(line=child.line, value=int(val_str), literal_type="int")
             elif child.type == 'CNAME':
                 return Identifier(line=child.line, name=str(child))
-        # otherwise it's already an AST node (like from parens)
         return child
         
     def input_call(self):
