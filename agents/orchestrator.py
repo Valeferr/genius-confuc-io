@@ -6,7 +6,7 @@ from agents.planner_agent import PlannerAgent
 from agents.generator_agent import GeneratorAgent
 from agents.validator_agent import ValidatorAgent
 from agents.repair_agent import RepairAgent
-from agents.llm_client import MockLLMClient, RealLLMClient, GitHubModelsClient, OllamaClient, HuggingFaceClient
+from agents.llm_client import MockLLMClient, AzureLLMClient
 import config
 
 class GraphState(TypedDict):
@@ -14,7 +14,6 @@ class GraphState(TypedDict):
     plan_json: Dict[str, Any]
     generated_code: str
     
-    # Syntax/Semantic Validation, Repair
     syntax_errors: List[Dict[str, Any]]
     semantic_errors: List[Dict[str, Any]]
     error_report: Dict[str, Any]
@@ -28,45 +27,44 @@ class Orchestrator:
         Orchestrator for the ConfuC-IO code generation pipeline with LangGraph.
         Selects the LLM client based on environment configuration:
           - USE_MOCK=true  → MockLLMClient (no API required, for testing)
-          - USE_MOCK=false → AzureLLMClient (requires Azure OpenAI credentials in .env)
+          - AZURE_OPENAI_API_KEY → AzureLLMClient (uses Azure OpenAI API)
         """
         if config.USE_MOCK:
             print("[Orchestrator] Using MOCK LLM Client")
             client = MockLLMClient()
-        elif config.HF_TOKEN:
-            print("[Orchestrator] Using HUGGINGFACE Client (GLM-5.2)")
-            client = HuggingFaceClient(hf_token=config.HF_TOKEN)
+        elif config.AZURE_OPENAI_API_KEY:
+            print(f"[Orchestrator] Using AZURE OPENAI Client ({config.AZURE_OPENAI_DEPLOYMENT})")
+            client = AzureLLMClient(
+                api_key=config.AZURE_OPENAI_API_KEY,
+                endpoint=config.AZURE_OPENAI_ENDPOINT,
+                api_version=config.AZURE_OPENAI_API_VERSION,
+                deployment_name=config.AZURE_OPENAI_DEPLOYMENT
+            )
         else:
             raise ValueError(
-                "No LLM configured. Set USE_MOCK=true or provide HF_TOKEN in your .env file."
+                "No LLM configured. Set USE_MOCK=true or provide AZURE_OPENAI_API_KEY in your .env file."
             )
 
-        # Agents share a single client; ValidatorAgent is deterministic (uses Lark)
         self.planner = PlannerAgent(client=client)
         self.generator = GeneratorAgent(client=client)
         self.validator = ValidatorAgent()
         self.repair = RepairAgent(client=client)
         
-        # Build LangGraph workflow
         self.graph = self._build_graph()
 
     def _build_graph(self):
-        # 1. Inizializza lo StateGraph
         workflow = StateGraph(GraphState)
 
-        # 2. Aggiunge i nodi
         workflow.add_node("planner_node", self._planner_node)
         workflow.add_node("generator_node", self._generator_node)
         workflow.add_node("syntax_validation_node", self._syntax_validation_node)
         workflow.add_node("semantic_validation_node", self._semantic_validation_node)
         workflow.add_node("repair_node", self._repair_node)
 
-        # 3. Definisce gli archi
         workflow.add_edge(START, "planner_node")
         workflow.add_edge("planner_node", "generator_node")
         workflow.add_edge("generator_node", "syntax_validation_node")
 
-        # 4. Definisce gli archi condizionali
         workflow.add_conditional_edges(
             "syntax_validation_node",
             self._route_after_syntax,
@@ -88,10 +86,8 @@ class Orchestrator:
         
         workflow.add_edge("repair_node", "syntax_validation_node")
 
-        # 5. Compila il grafo
         return workflow.compile()
 
-    # --- Funzioni Nodo ---
     def _planner_node(self, state: GraphState) -> Dict[str, Any]:
         print("[Orchestrator] Esecuzione nodo: planner_node")
         try:
@@ -107,7 +103,6 @@ class Orchestrator:
 
         print("[Orchestrator] Esecuzione nodo: generator_node")
         try:
-            # First generation step (qa_feedback is not used in the loop now, repair updates generated_code directly)
             code = self.generator.generate_code(state["plan_json"])
             return {"generated_code": code, "syntax_errors": [], "semantic_errors": []}
         except Exception as e:
@@ -153,7 +148,6 @@ class Orchestrator:
             "semantic_errors": []
         }
 
-    # --- Routing Condizionale ---
     def _route_after_syntax(self, state: GraphState) -> str:
         if state.get("error_message"): return "end"
         
@@ -176,10 +170,9 @@ class Orchestrator:
         print("[Orchestrator] Validazione sintattica e semantica superata con successo!")
         return "end"
 
-    # --- Esecuzione Principale ---
     def run_pipeline(self, user_request: str) -> str:
         print("\n" + "="*40)
-        print("🚀 INIZIO PIPELINE ORCHESTRATOR (LANGGRAPH + QA)")
+        print("INIZIO PIPELINE ORCHESTRATOR (LANGGRAPH + QA)")
         print("="*40)
         print(f"Richiesta Utente: {user_request}\n")
 
@@ -197,17 +190,17 @@ class Orchestrator:
         final_state = self.graph.invoke(initial_state)
 
         if final_state.get("retry_count", 0) >= config.MAX_RETRIES and (final_state.get("syntax_errors") or final_state.get("semantic_errors")):
-            print(f"\n❌ ERRORE NON RISOLTO DOPO {config.MAX_RETRIES} TENTATIVI.")
+            print(f"\nERRORE NON RISOLTO DOPO {config.MAX_RETRIES} TENTATIVI.")
             print("Ultimi errori:")
             for err in (final_state.get("syntax_errors") or []) + (final_state.get("semantic_errors") or []):
                 print(f"- {err['phase']} error: {err['error']} (line {err['line']})")
             
         if final_state.get("error_message"):
-            print(f"\n❌ ERRORE NELLA PIPELINE: {final_state['error_message']}")
+            print(f"\nERRORE NELLA PIPELINE: {final_state['error_message']}")
             return ""
 
         print("="*40)
-        print("✅ FINE PIPELINE ORCHESTRATOR")
+        print("FINE PIPELINE ORCHESTRATOR")
         print("="*40 + "\n")
         
         return final_state.get("generated_code", "")
