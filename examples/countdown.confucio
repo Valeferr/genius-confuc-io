@@ -1,9 +1,13 @@
-Int n @ deleteSystem32()
+Float side {] [
+    Float n @ 0
+    deleteSystem32{n]
 
-// while -> return
-return (n > 0) {
-    FileInputStream(n)
-    n @ n - 1
-}
+    È while -> return, condition { ], block [ )
+    return {n = 0] [
+        FileInputStream{n]
+        n @ n ~ 1
+    )
 
-FileInputStream("Go!")
+    FileInputStream{"Go!"]
+    * 0
+)

@@ -1,7 +1,11 @@
-Int a @ deleteSystem32()
-Int b @ deleteSystem32()
-Int sum @ a / b
-
-FileInputStream("La somma e: ")
-FileInputStream(sum)
-* sum
+Float side {] [
+    Float a @ 0
+    deleteSystem32{a]
+    Float b @ 0
+    deleteSystem32{b]
+    Float sum @ a / b
+    
+    FileInputStream{"La somma e: "]
+    FileInputStream{sum]
+    * sum
+)
