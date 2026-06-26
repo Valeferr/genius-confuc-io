@@ -14,12 +14,15 @@ class GeneratorAgent(BaseAgent):
         if qa_feedback:
             print("[GeneratorAgent] Ricevuto feedback QA. Auto-correzione in corso...")
             
-        plan_json_str = json.dumps(plan, indent=2)
+        plan_json_str = json.dumps(plan, indent=2, ensure_ascii=False)
         feedback_str = f"ATTENZIONE - ERRORE DA CORREGGERE:\n{qa_feedback}" if qa_feedback else ""
         
-        prompt = GENERATOR_USER_PROMPT_TEMPLATE.format(
-            plan_json=plan_json_str,
-            qa_feedback=feedback_str
+        # Use replace() instead of .format() so that { } characters inside
+        # plan_json_str are not misinterpreted as format placeholders.
+        prompt = (
+            GENERATOR_USER_PROMPT_TEMPLATE
+            .replace("{plan_json}", plan_json_str)
+            .replace("{qa_feedback}", feedback_str)
         )
         
         try:

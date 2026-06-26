@@ -111,10 +111,19 @@ class Orchestrator:
     def _syntax_validation_node(self, state: GraphState) -> Dict[str, Any]:
         if state.get("error_message"): return {}
         print("[Orchestrator] Esecuzione nodo: syntax_validation_node")
-        
-        errors = self.validator.validate_syntax(state["generated_code"])
+
+        # Auto-correct common LLM delimiter mistakes before parsing
+        from agents.confucio_parser import sanitize_confucio_code
+        sanitized = sanitize_confucio_code(state["generated_code"])
+
+        errors = self.validator.validate_syntax(sanitized)
         errors_list = [err.model_dump() for err in errors]
-        return {"syntax_errors": errors_list}
+
+        result = {"syntax_errors": errors_list}
+        # Propagate sanitized code so repair and semantic nodes see the fixed version
+        if sanitized != state["generated_code"]:
+            result["generated_code"] = sanitized
+        return result
 
     def _semantic_validation_node(self, state: GraphState) -> Dict[str, Any]:
         if state.get("error_message"): return {}
