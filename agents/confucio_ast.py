@@ -14,19 +14,12 @@ class Expression(ASTNode):
     pass
 
 @dataclass
-class Parameter(ASTNode):
-    param_type: str
-    name: str
-
-@dataclass
-class FunctionDef(ASTNode):
-    return_type: str
-    name: str
-    parameters: List[Parameter]
-    body: List[Statement]
-
-@dataclass
 class Program(ASTNode):
+    """
+    Root node of a Confuc-IO program.
+    Confuc-IO has no user-defined functions; the only entry point is the
+    built-in `side` name (equivalent to conventional `main`).
+    """
     statements: List[Statement] = field(default_factory=list)
 
 
@@ -43,17 +36,26 @@ class Assignment(Statement):
 
 @dataclass
 class IfStatement(Statement):
+    """
+    Corresponds to Confuc-IO `func {condition] [body)` (conventional `if`).
+    No else clause exists in the language.
+    """
     condition: Expression
     then_body: List[Statement]
-    else_body: List[Statement] = field(default_factory=list)
 
 @dataclass
 class WhileLoop(Statement):
+    """
+    Corresponds to Confuc-IO `return {condition] [body)` (conventional `while`).
+    """
     condition: Expression
     body: List[Statement]
 
 @dataclass
 class ForLoop(Statement):
+    """
+    Corresponds to Confuc-IO `if {init; cond; update] [body)` (conventional `for`).
+    """
     init: Statement
     condition: Expression
     update: Statement
@@ -78,6 +80,21 @@ class ExpressionStatement(Statement):
 
 @dataclass
 class BinaryOp(Expression):
+    """
+    Arithmetic / comparison binary operation.
+
+    Confuc-IO arithmetic operators:
+      '/'   = addition    (conventional +)
+      '~'   = subtraction (conventional -)
+      '+'   = division    (conventional /)
+      'Bool' = multiplication (conventional *)
+
+    Confuc-IO comparison operators:
+      '='   = greater than (conventional >)
+      '#'   = less than    (conventional <)
+      '@@'  = equality     (conventional ==)
+      '!@'  = inequality   (conventional !=)
+    """
     operator: str
     left: Expression
     right: Expression
@@ -102,5 +119,6 @@ class FunctionCall(Expression):
     arguments: List[Expression]
 
 @dataclass
-class InputCall(Expression):
-    pass
+class InputStatement(Statement):
+    variable: str
+

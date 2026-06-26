@@ -68,8 +68,8 @@ class ConfucIOASTBuilder(Transformer):
                 return Identifier(line=child.line, name=str(child))
         return child
         
-    def input_call(self):
-        return InputCall(line=0)
+    def input_stmt(self, name):
+        return InputStatement(line=0, variable=str(name))
         
     def ESCAPED_STRING(self, token):
         val = str(token)[1:-1] # Remove quotes

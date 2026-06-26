@@ -1,8 +1,28 @@
+import re
 from lark import Lark
 
 
-CONFUCIO_GRAMMAR = """
-    start: statement+
+# ---------------------------------------------------------------------------
+# Confuc-IO Grammar — aligned with mapping_reference.md
+#
+# Keyword mapping (Confuc-IO ← conventional):
+#   func   ← if         return ← while      if ← for       * ← return
+#
+# Delimiter mapping (Confuc-IO ← conventional):
+#   {  ←  (    ]  ←  )    [  ←  {    )  ←  }
+#
+# Operator mapping (Confuc-IO ← conventional):
+#   /  ← +    ~  ← -    +  ← /    Bool ← *
+#   =  ← >    #  ← <    @@ ← ==   @  ← =  (assignment)
+#
+# Type mapping (Confuc-IO ← conventional):
+#   Float ← int    int ← string    String ← float    While ← bool
+#
+# Comment indicator: È
+# ---------------------------------------------------------------------------
+CONFUCIO_GRAMMAR = r"""
+    // Entry point MUST be: Float side {] [ statements... )
+    start: "Float" "side" "{" "]" "[" statement* ")"
 
     ?statement: declaration
               | assignment
@@ -11,56 +31,140 @@ CONFUCIO_GRAMMAR = """
               | for_stmt
               | return_stmt
               | print_stmt
+              | input_stmt
               | expression
 
+    // Variable declaration:  TYPE name @ value
     declaration: TYPE CNAME "@" expression
+
+    // Assignment:  name @ value
     assignment: CNAME "@" expression
-    
-    if_stmt: "func" "(" condition ")" "{" statement* "}"
-    while_stmt: "return" "(" condition ")" "{" statement* "}"
-    for_stmt: "if" "(" (declaration|assignment) ";" condition ";" assignment ")" "{" statement* "}"
-    
+
+    // if  (conventional) → func  {condition] [body)
+    if_stmt: "func" "{" condition "]" "[" statement* ")"
+
+    // while (conventional) → return {condition] [body)
+    while_stmt: "return" "{" condition "]" "[" statement* ")"
+
+    // for  (conventional) → if {init; cond; update] [body)
+    for_stmt: "if" "{" (declaration|assignment) ";" condition ";" assignment "]" "[" statement* ")"
+
+    // return (conventional) → *
     return_stmt: "*" expression
-    print_stmt: "FileInputStream" "(" expression ")"
-    
+
+    // print (conventional) → FileInputStream{expr]
+    print_stmt: "FileInputStream" "{" expression "]"
+
+    // Conditions use Confuc-IO comparison operators
     ?condition: expression (COMPARE_OP expression)? -> condition
-    COMPARE_OP: "<" | ">" | "==" | "!=" | "<=" | ">="
-    
-    ?expression: math_expr | input_call | ESCAPED_STRING
-    
-    ?math_expr: math_expr "/" term -> add
-              | math_expr "-" term -> sub
-              | math_expr "*" term -> mul
-              | math_expr "%" term -> mod
+    COMPARE_OP: "@@"        // == (equality)
+              | "="         // >  (greater than)
+              | "#"         // <  (less than)
+              | "!@"        // != (inequality) #TODO: abbiamo aggiunto != al linguaggio di confuc-io perché l' LLM non riusciva a generare codice valido senza
+
+    ?expression: math_expr | ESCAPED_STRING
+
+    // Arithmetic operators use Confuc-IO symbols:
+    //   /  = addition,  ~  = subtraction,  +  = division,  Bool = multiplication
+    ?math_expr: math_expr "/"    term -> add
+              | math_expr "~"    term -> sub
+              | math_expr "+"    term -> div
+              | math_expr "Bool" term -> mul
               | term
-    
-    term: NUMBER | CNAME | "(" math_expr ")"
-    
-    input_call: "deleteSystem32" "(" ")"
-    
-    TYPE.10: "Int" | "Float" | "String" | "Bool"
-    
+
+    // Grouped expression uses { ] (conventional parentheses are swapped)
+    term: NUMBER | CNAME | "{" math_expr "]"
+
+    // User input:  deleteSystem32{var]  (like scanf, modifies the variable)
+    input_stmt: "deleteSystem32" "{" CNAME "]"
+
+    // Confuc-IO types (all names intentionally misleading):
+    //   Float = int,  int = string,  String = float,  While = bool
+    TYPE.10: "Float" | "int" | "String" | "While"
+
     %import common.CNAME
     %import common.NUMBER
     %import common.ESCAPED_STRING
     %import common.WS
     %ignore WS
-    
-    // Ignoriamo i commenti
-    COMMENT: "//" /[^\\n]*/
+
+    // Comments start with È
+    COMMENT: /È[^\n]*/
     %ignore COMMENT
 """
 
+
 def get_parser():
-    """Restituisce l'istanza del parser Lark per Confuc-IO."""
+    """Returns the Lark parser instance for Confuc-IO."""
     return Lark(CONFUCIO_GRAMMAR, start='start', parser='lalr')
+
 
 def validate_code(code: str):
     """
-    Tenta di fare il parsing del codice fornito.
-    Se il codice contiene errori sintattici (es. usa un if normale anziché func),
-    il parser LALR di Lark solleverà un'eccezione (UnexpectedToken, UnexpectedCharacters).
-    Restituisce l'albero AST se valido.
+    Attempts to parse the provided Confuc-IO source code.
+
+    Raises lark.UnexpectedToken / lark.UnexpectedCharacters if the code
+    violates the grammar (e.g. uses conventional `if` instead of `func`,
+    or conventional `(` instead of `{`).
+
+    Returns the Lark parse tree on success.
     """
     parser = get_parser()
     return parser.parse(code)
+
+
+def sanitize_confucio_code(code: str) -> str:
+    """
+    Deterministically fix the most common LLM delimiter mistakes before parsing.
+
+    Fixes applied:
+    1. deleteSystem32[] or deleteSystem32()  →  deleteSystem32{]
+       ([ opens blocks, not parentheses; conventional () are forbidden)
+
+    2. [...] where ] closes a block  →  [...) 
+       The algorithm tracks a stack of unmatched openers ({ or [):
+         - '{' expects ']' to close it  (condition)
+         - '[' expects ')' to close it  (block body)
+       If a ']' is found while the current open delimiter is '[', it is
+       a block-closer written wrongly — replace it with ')'.
+
+    This sanitizer is called automatically before syntax validation so the
+    LLM does not need to be perfectly reliable on these structural details.
+    """
+    # Step 1: fix deleteSystem32 call syntax (extract var name)
+    code = re.sub(r'\bdeleteSystem32\[([a-zA-Z0-9_]+)\]', r'deleteSystem32{\1]', code)
+    code = re.sub(r'\bdeleteSystem32\(([a-zA-Z0-9_]+)\)', r'deleteSystem32{\1]', code)
+
+    # Step 2: fix ] used as block closer instead of )
+    result = []
+    stack = []  # tracks unmatched openers: '{' or '['
+
+    for ch in code:
+        if ch == '{':
+            stack.append('{')
+            result.append(ch)
+        elif ch == '[':
+            stack.append('[')
+            result.append(ch)
+        elif ch == ']':
+            if stack and stack[-1] == '[':
+                # ] is closing a block opened with [ — LLM mistake, fix to )
+                stack.pop()
+                result.append(')')
+            else:
+                # ] is correctly closing a condition opened with {
+                if stack and stack[-1] == '{':
+                    stack.pop()
+                result.append(']')
+        elif ch == ')':
+            if stack and stack[-1] == '[':
+                # ) correctly closes a block opened with [
+                stack.pop()
+            result.append(')')
+        else:
+            result.append(ch)
+
+    sanitized = ''.join(result)
+    if sanitized != code:
+        print(f"[Sanitizer] Auto-corrected {sum(1 for a, b in zip(code, sanitized) if a != b)} delimiter(s)")
+    return sanitized
