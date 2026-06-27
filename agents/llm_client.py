@@ -110,3 +110,43 @@ class AzureLLMClient(LLMClient):
         )
         print(f"[AzureLLMClient] Risposta ricevuta correttamente dal modello Azure OpenAI: {model or self.deployment_name}")
         return response.choices[0].message.content.strip()
+
+class OllamaClient(LLMClient):
+    """
+    Client per Ollama in locale.
+    """
+    def __init__(self, base_url: str = "http://localhost:11434", model: str = "codegemma:latest"):
+        self.base_url = base_url.rstrip("/")
+        self.model = model
+        try:
+            import requests
+            self.requests = requests
+        except ImportError:
+            raise ImportError("Libreria 'requests' non trovata. Esegui: pip install requests")
+
+    def generate(self, prompt: str, system_prompt: str = None, model: str = None) -> str:
+        messages = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": prompt})
+
+        payload = {
+            "model": model or self.model,
+            "messages": messages,
+            "stream": False,
+            "options": {
+                "temperature": 0.0
+            }
+        }
+        
+        response = self.requests.post(
+            f"{self.base_url}/api/chat",
+            json=payload,
+            timeout=120
+        )
+        
+        if response.status_code != 200:
+            raise Exception(f"Errore Ollama {response.status_code}: {response.text}")
+            
+        print(f"[OllamaClient] Risposta ricevuta correttamente dal modello locale: {model or self.model}")
+        return response.json()["message"]["content"].strip()

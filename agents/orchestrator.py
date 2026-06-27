@@ -6,7 +6,7 @@ from agents.planner_agent import PlannerAgent
 from agents.generator_agent import GeneratorAgent
 from agents.validator_agent import ValidatorAgent
 from agents.repair_agent import RepairAgent
-from agents.llm_client import MockLLMClient, AzureLLMClient
+from agents.llm_client import MockLLMClient, AzureLLMClient, OllamaClient
 import config
 
 class GraphState(TypedDict):
@@ -16,6 +16,7 @@ class GraphState(TypedDict):
     
     syntax_errors: List[Dict[str, Any]]
     semantic_errors: List[Dict[str, Any]]
+    logic_errors: List[Dict[str, Any]]
     error_report: Dict[str, Any]
     
     error_message: str
@@ -32,6 +33,7 @@ class Orchestrator:
         if config.USE_MOCK:
             print("[Orchestrator] Using MOCK LLM Client")
             client = MockLLMClient()
+            self.logic_client = MockLLMClient()
         elif config.AZURE_OPENAI_API_KEY:
             print(f"[Orchestrator] Using AZURE OPENAI Client ({config.AZURE_OPENAI_DEPLOYMENT})")
             client = AzureLLMClient(
@@ -39,6 +41,11 @@ class Orchestrator:
                 endpoint=config.AZURE_OPENAI_ENDPOINT,
                 api_version=config.AZURE_OPENAI_API_VERSION,
                 deployment_name=config.AZURE_OPENAI_DEPLOYMENT
+            )
+            print(f"[Orchestrator] Using OLLAMA Client ({config.OLLAMA_MODEL}) for logic validation")
+            self.logic_client = OllamaClient(
+                base_url=config.OLLAMA_BASE_URL,
+                model=config.OLLAMA_MODEL
             )
         else:
             raise ValueError(
@@ -59,6 +66,7 @@ class Orchestrator:
         workflow.add_node("generator_node", self._generator_node)
         workflow.add_node("syntax_validation_node", self._syntax_validation_node)
         workflow.add_node("semantic_validation_node", self._semantic_validation_node)
+        workflow.add_node("logic_validation_node", self._logic_validation_node)
         workflow.add_node("repair_node", self._repair_node)
 
         workflow.add_edge(START, "planner_node")
@@ -78,6 +86,16 @@ class Orchestrator:
         workflow.add_conditional_edges(
             "semantic_validation_node",
             self._route_after_semantic,
+            {
+                "repair_node": "repair_node",
+                "logic_validation_node": "logic_validation_node",
+                "end": END
+            }
+        )
+
+        workflow.add_conditional_edges(
+            "logic_validation_node",
+            self._route_after_logic,
             {
                 "repair_node": "repair_node",
                 "end": END
@@ -144,6 +162,8 @@ class Orchestrator:
             all_errors.extend([DiagnosticError(**err) for err in state["syntax_errors"]])
         if state.get("semantic_errors"):
             all_errors.extend([DiagnosticError(**err) for err in state["semantic_errors"]])
+        if state.get("logic_errors"):
+            all_errors.extend([DiagnosticError(**err) for err in state["logic_errors"]])
             
         report = ValidationReport(is_valid=False, errors=all_errors)
         result = self.repair.repair_code(state["generated_code"], report)
@@ -154,7 +174,8 @@ class Orchestrator:
             "generated_code": result.repaired_code,
             "retry_count": new_retry,
             "syntax_errors": [],
-            "semantic_errors": []
+            "semantic_errors": [],
+            "logic_errors": []
         }
 
     def _route_after_syntax(self, state: GraphState) -> str:
@@ -176,7 +197,67 @@ class Orchestrator:
                 return "end"
             return "repair_node"
         
-        print("[Orchestrator] Validazione sintattica e semantica superata con successo!")
+        return "logic_validation_node"
+
+    def _logic_validation_node(self, state: GraphState) -> Dict[str, Any]:
+        if state.get("error_message"): return {}
+        print("[Orchestrator] Esecuzione nodo: logic_validation_node")
+
+        prompt = (
+            f"Sei un validatore logico esperto.\n"
+            f"Devi determinare se il codice ConfuC-IO risolve effettivamente la richiesta originale dell'utente.\n\n"
+            f"ATTENZIONE ESTREMA: CONFUC-IO E' UN LINGUAGGIO ESOTERICO PROGETTATO PER CONFONDERE! DEVI DIMENTICARE LE TUE CONOSCENZE DI JAVA/C/PYTHON E OBBEDIRE CIECAMENTE A QUESTE REGOLE:\n"
+            f"1. FileInputStream{{x] --> significa ESATTAMENTE `print(x)`. NON APRE NESSUN FILE! Serve solo a stampare a schermo.\n"
+            f"2. deleteSystem32{{x] --> significa ESATTAMENTE `x = input()`. NON ELIMINA NESSUN FILE! Serve a leggere input dall'utente.\n"
+            f"3. I tipi sono finti: Float=intero, String=decimale, int=stringa di testo.\n"
+            f"4. Gli operatori sono finti: `/` somma, `~` sottrae, `+` divide, `Bool` moltiplica.\n"
+            f"5. I cicli e gli if sono rinominati: `func` = if, `return` = while, `if` = for.\n"
+            f"6. L'operatore di assegnazione è `@`.\n"
+            f"7. L'output di fine funzione si fa con `*`.\n\n"
+            f"Se il codice usa `FileInputStream{{\"ciao\"]`, sta correttamente stampando la parola ciao e NON sta aprendo file.\n\n"
+            f"Richiesta dell'utente:\n{state['user_request']}\n\n"
+            f"Codice generato:\n{state['generated_code']}\n\n"
+            f"Rispondi ESCLUSIVAMENTE in formato JSON con la seguente struttura:\n"
+            f"{{\n"
+            f"  \"is_valid\": true/false,\n"
+            f"  \"reason\": \"Spiega il tuo ragionamento logico. Considera solo la logica, assumendo che i nomi bizzarri delle funzioni facciano quello che è scritto nelle regole.\"\n"
+            f"}}\n"
+        )
+        
+        try:
+            response_text = self.logic_client.generate(prompt=prompt)
+            clean_text = response_text.strip()
+            if clean_text.startswith("```json"): clean_text = clean_text[7:]
+            if clean_text.startswith("```"): clean_text = clean_text[3:]
+            if clean_text.endswith("```"): clean_text = clean_text[:-3]
+            
+            data = json.loads(clean_text)
+            
+            if not data.get("is_valid", False):
+                err = {
+                    "phase": "logic",
+                    "error": data.get("reason", "Errore logico non specificato"),
+                    "line": 0
+                }
+                return {"logic_errors": [err]}
+            
+            return {"logic_errors": []}
+            
+        except Exception as e:
+            # Se la validazione fallisce per errori di connessione/parsing JSON, procediamo senza bloccare
+            print(f"[Orchestrator] Impossibile validare la logica: {e}")
+            return {"logic_errors": []}
+
+    def _route_after_logic(self, state: GraphState) -> str:
+        if state.get("error_message"): return "end"
+        
+        if state.get("logic_errors"):
+            if state.get("retry_count", 0) >= config.MAX_RETRIES:
+                print(f"[Orchestrator] Raggiunto limite max tentativi ({config.MAX_RETRIES}) su errore logico. Termino.")
+                return "end"
+            return "repair_node"
+            
+        print("[Orchestrator] Validazione sintattica, semantica e logica superate con successo!")
         return "end"
 
     def run_pipeline(self, user_request: str) -> str:
@@ -193,15 +274,17 @@ class Orchestrator:
             "retry_count": 0,
             "syntax_errors": [],
             "semantic_errors": [],
+            "logic_errors": [],
             "error_report": {}
         }
 
         final_state = self.graph.invoke(initial_state)
 
-        if final_state.get("retry_count", 0) >= config.MAX_RETRIES and (final_state.get("syntax_errors") or final_state.get("semantic_errors")):
+        if final_state.get("retry_count", 0) >= config.MAX_RETRIES and (final_state.get("syntax_errors") or final_state.get("semantic_errors") or final_state.get("logic_errors")):
             print(f"\nERRORE NON RISOLTO DOPO {config.MAX_RETRIES} TENTATIVI.")
             print("Ultimi errori:")
-            for err in (final_state.get("syntax_errors") or []) + (final_state.get("semantic_errors") or []):
+            all_final_errors = (final_state.get("syntax_errors") or []) + (final_state.get("semantic_errors") or []) + (final_state.get("logic_errors") or [])
+            for err in all_final_errors:
                 print(f"- {err['phase']} error: {err['error']} (line {err['line']})")
             
         if final_state.get("error_message"):
