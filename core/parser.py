@@ -1,7 +1,6 @@
 import re
 from lark import Lark
 
-
 # ---------------------------------------------------------------------------
 # Confuc-IO Grammar — aligned with mapping_reference.md
 #
@@ -60,7 +59,7 @@ CONFUCIO_GRAMMAR = r"""
     COMPARE_OP: "@@"        // == (equality)
               | "="         // >  (greater than)
               | "#"         // <  (less than)
-              | "!@"        // != (inequality) #TODO: abbiamo aggiunto != al linguaggio di confuc-io perché l' LLM non riusciva a generare codice valido senza
+              | "!@"        // != (inequality) #TODO: abbiamo aggiunto != al linguaggio di confuc-io perché l'LLM non riusciva a generare codice valido senza
 
     ?expression: math_expr | ESCAPED_STRING
 
@@ -127,6 +126,8 @@ def sanitize_confucio_code(code: str) -> str:
          - '[' expects ')' to close it  (block body)
        If a ']' is found while the current open delimiter is '[', it is
        a block-closer written wrongly — replace it with ')'.
+       If a '}' is found, it is always a mistake (conventional brace).
+       We auto-replace it with ']' or ')' depending on the stack.
 
     This sanitizer is called automatically before syntax validation so the
     LLM does not need to be perfectly reliable on these structural details.
@@ -161,6 +162,17 @@ def sanitize_confucio_code(code: str) -> str:
                 # ) correctly closes a block opened with [
                 stack.pop()
             result.append(')')
+        elif ch == '}':
+            # } is always wrong (conventional syntax leaked in)
+            if stack and stack[-1] == '{':
+                # closing a condition
+                stack.pop()
+                result.append(']')
+            else:
+                # closing a block
+                if stack and stack[-1] == '[':
+                    stack.pop()
+                result.append(')')
         else:
             result.append(ch)
 

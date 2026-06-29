@@ -1,6 +1,6 @@
 import json
 from typing import Dict, Any
-from agents.llm_client import LLMClient
+from llm.client import LLMClient
 
 class BaseAgent:
     """

@@ -1,5 +1,5 @@
 from typing import List, Dict
-from .confucio_ast import *
+from core.ast import *
 from .diagnostics import DiagnosticError
 
 # ---------------------------------------------------------------------------

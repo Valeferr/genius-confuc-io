@@ -1,8 +1,8 @@
 from typing import List, Any
-from .diagnostics import DiagnosticError, ValidationReport
-from .confucio_parser import get_parser
-from .confucio_ast_builder import ConfucIOASTBuilder
-from .semantic_checker import SemanticChecker
+from core.diagnostics import DiagnosticError, ValidationReport
+from core.parser import get_parser
+from core.ast_builder import ConfucIOASTBuilder
+from core.semantic_checker import SemanticChecker
 
 class ValidatorAgent:
     def __init__(self, parser=None, ast_builder=None, semantic_checker=None):

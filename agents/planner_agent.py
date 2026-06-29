@@ -1,6 +1,6 @@
 from typing import Dict, Any
 from agents.base_agent import BaseAgent
-from agents.llm_client import LLMClient
+from llm.client import LLMClient
 from prompts.planner_prompts import PLANNER_SYSTEM_PROMPT, PLANNER_USER_PROMPT_TEMPLATE
 
 class PlannerAgent(BaseAgent):

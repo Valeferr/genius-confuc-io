@@ -6,7 +6,7 @@ from agents.planner_agent import PlannerAgent
 from agents.generator_agent import GeneratorAgent
 from agents.validator_agent import ValidatorAgent
 from agents.repair_agent import RepairAgent
-from agents.llm_client import MockLLMClient, AzureLLMClient, OllamaClient
+from llm.client import MockLLMClient, AzureLLMClient, OllamaClient
 import config
 
 class GraphState(TypedDict):
@@ -131,7 +131,7 @@ class Orchestrator:
         print("[Orchestrator] Esecuzione nodo: syntax_validation_node")
 
         # Auto-correct common LLM delimiter mistakes before parsing
-        from agents.confucio_parser import sanitize_confucio_code
+        from core.parser import sanitize_confucio_code
         sanitized = sanitize_confucio_code(state["generated_code"])
 
         errors = self.validator.validate_syntax(sanitized)
@@ -155,7 +155,7 @@ class Orchestrator:
         if state.get("error_message"): return {}
         print("[Orchestrator] Esecuzione nodo: repair_node")
         
-        from agents.diagnostics import ValidationReport, DiagnosticError
+        from core.diagnostics import ValidationReport, DiagnosticError
         
         all_errors = []
         if state.get("syntax_errors"):

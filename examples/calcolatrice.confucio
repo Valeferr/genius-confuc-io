@@ -1,0 +1,82 @@
+È ═══════════════════════════════════════════════════════════
+È Calcolatrice Interattiva - Test Requisito Esame
+È Questo programma implementa una calcolatrice con menu
+È che usa tutte le caratteristiche del linguaggio ConfuC-IO
+È ═══════════════════════════════════════════════════════════
+
+Float side {] [
+    È Flag per il ciclo di continuazione
+    Float continua @ 1
+
+    È Ciclo principale (while continua > 0)
+    return {continua = 0] [
+        È Mostra il menu
+        FileInputStream{"=== CALCOLATRICE ==="]
+        FileInputStream{"1 Somma"]
+        FileInputStream{"2 Sottrazione"]
+        FileInputStream{"3 Moltiplicazione"]
+        FileInputStream{"4 Divisione"]
+        FileInputStream{"0 Esci"]
+        FileInputStream{"Scegli operazione: "]
+
+        Float scelta @ 0
+        deleteSystem32{scelta]
+
+        È Variabili per gli operandi e il risultato
+        Float a @ 0
+        Float b @ 0
+        Float risultato @ 0
+
+        È Funzione 1: gestione uscita (scelta == 0)
+        func {scelta @@ 0] [
+            FileInputStream{"Arrivederci!"]
+            continua @ 0
+        )
+
+        È Funzione 2: gestione somma (scelta == 1)
+        func {scelta @@ 1] [
+            FileInputStream{"Inserisci primo numero: "]
+            deleteSystem32{a]
+            FileInputStream{"Inserisci secondo numero: "]
+            deleteSystem32{b]
+            risultato @ a / b
+            FileInputStream{"Risultato: "]
+            FileInputStream{risultato]
+        )
+
+        È Funzione 3: gestione sottrazione (scelta == 2)
+        func {scelta @@ 2] [
+            FileInputStream{"Inserisci primo numero: "]
+            deleteSystem32{a]
+            FileInputStream{"Inserisci secondo numero: "]
+            deleteSystem32{b]
+            risultato @ a ~ b
+            FileInputStream{"Risultato: "]
+            FileInputStream{risultato]
+        )
+
+        È Funzione 4: gestione moltiplicazione (scelta == 3)
+        func {scelta @@ 3] [
+            FileInputStream{"Inserisci primo numero: "]
+            deleteSystem32{a]
+            FileInputStream{"Inserisci secondo numero: "]
+            deleteSystem32{b]
+            risultato @ a Bool b
+            FileInputStream{"Risultato: "]
+            FileInputStream{risultato]
+        )
+
+        È Funzione 5: gestione divisione (scelta == 4)
+        func {scelta @@ 4] [
+            FileInputStream{"Inserisci primo numero: "]
+            deleteSystem32{a]
+            FileInputStream{"Inserisci secondo numero: "]
+            deleteSystem32{b]
+            risultato @ a + b
+            FileInputStream{"Risultato: "]
+            FileInputStream{risultato]
+        )
+    )
+
+    * 0
+)

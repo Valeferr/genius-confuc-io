@@ -1,5 +1,18 @@
 from lark import Transformer, v_args
-from .confucio_ast import *
+from core.ast import (
+    Program, 
+    VarDeclaration, 
+    Assignment, 
+    IfStatement, 
+    WhileLoop, 
+    ForLoop, 
+    ReturnStatement, 
+    PrintStatement, 
+    BinaryOp, 
+    Literal, 
+    Identifier, 
+    InputStatement
+)
 
 @v_args(inline=True)
 class ConfucIOASTBuilder(Transformer):

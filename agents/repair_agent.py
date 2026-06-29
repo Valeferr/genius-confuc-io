@@ -1,8 +1,8 @@
 import json
 from pydantic import BaseModel, Field
 from typing import Optional
-from .diagnostics import ValidationReport
-from .llm_client import LLMClient
+from core.diagnostics import ValidationReport
+from llm.client import LLMClient
 
 class RepairResult(BaseModel):
     repaired_code: str = Field(description="The source code after being repaired.")
