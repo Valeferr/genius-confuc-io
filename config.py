@@ -19,3 +19,7 @@ AZURE_OPENAI_DEPLOYMENT = os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt-4o")
 
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "codegemma:latest")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+
+# Configurazione MCP Client
+MCP_CLIENT_COMMAND = os.getenv("MCP_CLIENT_COMMAND", "")
+MCP_CLIENT_ARGS = os.getenv("MCP_CLIENT_ARGS", "").split() if os.getenv("MCP_CLIENT_ARGS") else []

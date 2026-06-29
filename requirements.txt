@@ -4,3 +4,4 @@ lark
 requests
 openai
 python-dotenv
+mcp[cli]
