@@ -45,6 +45,9 @@ CONFUC-IO LANGUAGE SPECIFICATION  (read every rule carefully!)
    │ !@               │ inequality     (!=)       │
    └──────────────────┴──────────────────────────┘
    FORBIDDEN comparison operators: > < == != <= >=
+   CRITICAL RULE: Comparison operators can ONLY be used inside conditions (`func {cond]`, `return {cond]`). You CANNOT assign the result of a comparison to a variable!
+   WRONG: Float b @ x @@ y
+   RIGHT: func {x @@ y] [ Float b @ 1 )
 
 5. DELIMITERS — all swapped (this is the trickiest part!):
    ┌──────────────────┬──────────────────────────────────────────┐
@@ -122,10 +125,14 @@ COMMON MISTAKES TO AVOID
 ❌ return {cond] [body]  →  ✅ return {cond] [body)
 ❌ if {i @ 0; i # 5; i @ i / 1] [body] →  ✅ if {i @ 0; i # 5; i @ i / 1] [body)
 
+❌ FileInputStream{"test"}  →  ✅ FileInputStream{"test"]
+   (Never use } to close anything. Use ] for conditions/parentheses)
+
 ❌ FileInputStream(x)  →  ✅ FileInputStream{x]
 ❌ func (cond) {        →  ✅ func {cond] [
 ❌ else {               →  ✅ (no else in Confuc-IO — use a separate func block)
 ❌ Int x @ 5            →  ✅ Float x @ 5   (Int does not exist)
+❌ String s @ "ciao"    →  ✅ int s @ "ciao" (String means float, int means string!)
 ❌ Bool b @ 1           →  ✅ While b @ 1   (Bool is the multiplication operator, not a type)
 ❌ x = 5 (conventional assignment)  →  ✅ x @ 5
 ❌ a + b (conventional addition)    →  ✅ a / b
@@ -135,6 +142,15 @@ COMMON MISTAKES TO AVOID
 ❌ a < b (conventional less)        →  ✅ a # b
 ❌ a == b (conventional equality)   →  ✅ a @@ b
 ❌ a != b (conventional inequality) →  ✅ a !@ b
+
+❌ Float x {] [         →  ✅ Float x @ 0
+   (Never declare variables like blocks. Use TYPE name @ value)
+
+❌ Float f(Float x) {] [ → ✅ (Functions DO NOT exist! Do everything inside `side`)
+   CRITICAL: If the user asks you to "use functions", they mean you must use `func` blocks (Confuc-IO's IF statements). DO NOT try to declare real functions. Just write your logic inline inside `side` or inside `func` blocks.
+
+❌ continua @ x @@ y     → ✅ func {x @@ y] [ continua @ 1 )
+   (Comparisons can ONLY be used inside conditions. They cannot be assigned!)
 
 ════════════════════════════════════════════════════════════════
 COMPLETE WORKED EXAMPLES
