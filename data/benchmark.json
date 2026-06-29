@@ -1,0 +1,302 @@
+{
+  "benchmarks": [
+    {
+      "id": "TC-001",
+      "name": "Fibonacci",
+      "category": "loops",
+      "difficulty": "medium",
+      "user_request": "Crea una funzione che calcola Fibonacci",
+      "expected_code": "Float side {] [\n    Float n @ 0\n    deleteSystem32{n]\n    Float a @ 0\n    Float b @ 1\n    Float temp @ 0\n\n    func {n # 1] [\n        FileInputStream{a]\n        * a\n    )\n    func {n # 2] [\n        FileInputStream{b]\n        * b\n    )\n\n    if {Float i @ 0; i # n ~ 1; i @ i / 1] [\n        temp @ b\n        b @ a / b\n        a @ temp\n    )\n\n    FileInputStream{b]\n    * b\n)",
+      "expected_code_snippets": [
+        "deleteSystem32{",
+        "func {",
+        "if {",
+        " / ",
+        "FileInputStream{"
+      ],
+      "evaluation_criteria": {
+        "has_entry_point": true,
+        "has_input": true,
+        "has_output": true,
+        "has_loop": true,
+        "has_conditional": true,
+        "expected_constructs": [
+          "deleteSystem32",
+          "FileInputStream",
+          "if",
+          "func"
+        ]
+      }
+    },
+    {
+      "id": "TC-002",
+      "name": "Fattoriale",
+      "category": "loops",
+      "difficulty": "medium",
+      "user_request": "Scrivi un programma per calcolare il fattoriale di un numero",
+      "expected_code": "Float side {] [\n    Float n @ 0\n    deleteSystem32{n]\n    Float res @ 1\n\n    func {n # 2] [\n        * 1\n    )\n\n    if {Float i @ 2; i # n / 1; i @ i / 1] [\n        res @ res Bool i\n    )\n\n    FileInputStream{\"Fattoriale: \"]\n    FileInputStream{res]\n    * res\n)",
+      "expected_code_snippets": [
+        "deleteSystem32{",
+        "if {",
+        " Bool ",
+        " @ ",
+        "FileInputStream{",
+        "* "
+      ],
+      "evaluation_criteria": {
+        "has_entry_point": true,
+        "has_input": true,
+        "has_output": true,
+        "has_loop": true,
+        "has_conditional": true,
+        "expected_constructs": [
+          "deleteSystem32",
+          "FileInputStream",
+          "if",
+          "func"
+        ]
+      }
+    },
+    {
+      "id": "TC-003",
+      "name": "Hello World",
+      "category": "output",
+      "difficulty": "easy",
+      "user_request": "Scrivi un programma che stampa Hello World",
+      "expected_code": "Float side {] [\n    int msg @ \"Hello, World!\"\n    FileInputStream{msg]\n    * 0\n)",
+      "expected_code_snippets": [
+        "int ",
+        "FileInputStream{"
+      ],
+      "evaluation_criteria": {
+        "has_entry_point": true,
+        "has_input": false,
+        "has_output": true,
+        "has_loop": false,
+        "has_conditional": false,
+        "expected_constructs": [
+          "FileInputStream"
+        ]
+      }
+    },
+    {
+      "id": "TC-004",
+      "name": "Somma",
+      "category": "arithmetic",
+      "difficulty": "easy",
+      "user_request": "Prendi due numeri in input e stampa la somma",
+      "expected_code": "Float side {] [\n    Float a @ 0\n    deleteSystem32{a]\n    Float b @ 0\n    deleteSystem32{b]\n    Float sum @ a / b\n\n    FileInputStream{\"La somma e: \"]\n    FileInputStream{sum]\n    * sum\n)",
+      "expected_code_snippets": [
+        "deleteSystem32{",
+        "Float ",
+        " / ",
+        "FileInputStream{",
+        "* "
+      ],
+      "evaluation_criteria": {
+        "has_entry_point": true,
+        "has_input": true,
+        "has_output": true,
+        "has_loop": false,
+        "has_conditional": false,
+        "expected_constructs": [
+          "deleteSystem32",
+          "FileInputStream"
+        ]
+      }
+    },
+    {
+      "id": "TC-005",
+      "name": "Countdown",
+      "category": "loops",
+      "difficulty": "medium",
+      "user_request": "Fai un conteggio alla rovescia partendo da un numero inserito dall'utente",
+      "expected_code": "Float side {] [\n    Float n @ 0\n    deleteSystem32{n]\n\n    return {n = 0] [\n        FileInputStream{n]\n        n @ n ~ 1\n    )\n\n    FileInputStream{\"Go!\"]\n    * 0\n)",
+      "expected_code_snippets": [
+        "deleteSystem32{",
+        "return {",
+        " @ ",
+        " ~ ",
+        "FileInputStream{"
+      ],
+      "evaluation_criteria": {
+        "has_entry_point": true,
+        "has_input": true,
+        "has_output": true,
+        "has_loop": true,
+        "has_conditional": false,
+        "expected_constructs": [
+          "deleteSystem32",
+          "FileInputStream",
+          "return"
+        ]
+      }
+    },
+    {
+      "id": "TC-006",
+      "name": "Stampa ciao",
+      "category": "output",
+      "difficulty": "easy",
+      "user_request": "Stampa a schermo la parola ciao",
+      "expected_code": "Float side {] [\n    FileInputStream{\"ciao\"]\n    * 0\n)",
+      "expected_code_snippets": [
+        "FileInputStream{\"ciao\"]"
+      ],
+      "evaluation_criteria": {
+        "has_entry_point": true,
+        "has_input": false,
+        "has_output": true,
+        "has_loop": false,
+        "has_conditional": false,
+        "expected_constructs": [
+          "FileInputStream"
+        ]
+      }
+    },
+    {
+      "id": "TC-007",
+      "name": "Massimo tra due numeri",
+      "category": "conditionals",
+      "difficulty": "easy",
+      "user_request": "Trova il massimo tra due numeri in input",
+      "expected_code": "Float side {] [\n    Float a @ 0\n    deleteSystem32{a]\n    Float b @ 0\n    deleteSystem32{b]\n    Float max @ a\n\n    func {b = a] [\n        max @ b\n    )\n\n    FileInputStream{max]\n    * max\n)",
+      "expected_code_snippets": [
+        "deleteSystem32{",
+        "func {",
+        " = ",
+        "FileInputStream{",
+        "* "
+      ],
+      "evaluation_criteria": {
+        "has_entry_point": true,
+        "has_input": true,
+        "has_output": true,
+        "has_loop": false,
+        "has_conditional": true,
+        "expected_constructs": [
+          "deleteSystem32",
+          "FileInputStream",
+          "func"
+        ]
+      }
+    },
+    {
+      "id": "TC-008",
+      "name": "Somma da 1 a N",
+      "category": "loops",
+      "difficulty": "medium",
+      "user_request": "Calcola la somma dei numeri da 1 a N",
+      "expected_code": "Float side {] [\n    Float n @ 0\n    deleteSystem32{n]\n    Float somma @ 0\n\n    if {Float i @ 1; i # n / 1; i @ i / 1] [\n        somma @ somma / i\n    )\n\n    FileInputStream{\"Somma: \"]\n    FileInputStream{somma]\n    * somma\n)",
+      "expected_code_snippets": [
+        "deleteSystem32{",
+        "if {",
+        " / ",
+        "FileInputStream{",
+        " @ ",
+        "* "
+      ],
+      "evaluation_criteria": {
+        "has_entry_point": true,
+        "has_input": true,
+        "has_output": true,
+        "has_loop": true,
+        "has_conditional": false,
+        "expected_constructs": [
+          "deleteSystem32",
+          "FileInputStream",
+          "if"
+        ]
+      }
+    },
+    {
+      "id": "TC-009",
+      "name": "Pari o Dispari",
+      "category": "conditionals",
+      "difficulty": "medium",
+      "user_request": "Determina se un numero è pari o dispari",
+      "expected_code": "Float side {] [\n    Float n @ 0\n    deleteSystem32{n]\n    Float meta @ n + 2\n    Float ricostruito @ meta Bool 2\n\n    func {ricostruito @@ n] [\n        FileInputStream{\"pari\"]\n    )\n    func {ricostruito !@ n] [\n        FileInputStream{\"dispari\"]\n    )\n    * 0\n)",
+      "expected_code_snippets": [
+        "deleteSystem32{",
+        " Bool 2",
+        " @@ ",
+        "FileInputStream{"
+      ],
+      "evaluation_criteria": {
+        "has_entry_point": true,
+        "has_input": true,
+        "has_output": true,
+        "has_loop": false,
+        "has_conditional": true,
+        "expected_constructs": [
+          "deleteSystem32",
+          "FileInputStream",
+          "func"
+        ]
+      }
+    },
+    {
+      "id": "TC-010",
+      "name": "Tabellina",
+      "category": "loops",
+      "difficulty": "medium",
+      "user_request": "Stampa la tabellina di un numero dato",
+      "expected_code": "Float side {] [\n    Float n @ 0\n    deleteSystem32{n]\n\n    if {Float i @ 1; i # 11; i @ i / 1] [\n        Float risultato @ n Bool i\n        FileInputStream{risultato]\n    )\n    * 0\n)",
+      "expected_code_snippets": [
+        "deleteSystem32{",
+        "if {",
+        " Bool ",
+        " @ ",
+        " # ",
+        " / ",
+        "FileInputStream{"
+      ],
+      "evaluation_criteria": {
+        "has_entry_point": true,
+        "has_input": true,
+        "has_output": true,
+        "has_loop": true,
+        "has_conditional": false,
+        "expected_constructs": [
+          "deleteSystem32",
+          "FileInputStream",
+          "if"
+        ]
+      }
+    },
+    {
+      "id": "TC-011",
+      "name": "Calcolatrice Interattiva",
+      "category": "exam_required",
+      "difficulty": "hard",
+      "user_request": "Crea una calcolatrice interattiva con un menu che permette di scegliere tra somma, sottrazione, moltiplicazione e divisione. Il programma deve leggere due numeri in input, calcolare il risultato e chiedere se continuare con un'altra operazione o uscire. Usa almeno due funzioni.",
+      "expected_code": "Float side {] [\n    Float continua @ 1\n\n    return {continua = 0] [\n        FileInputStream{\"=== CALCOLATRICE ===\"]\n        FileInputStream{\"1 Somma\"]\n        FileInputStream{\"2 Sottrazione\"]\n        FileInputStream{\"3 Moltiplicazione\"]\n        FileInputStream{\"4 Divisione\"]\n        FileInputStream{\"0 Esci\"]\n        FileInputStream{\"Scegli operazione: \"]\n\n        Float scelta @ 0\n        deleteSystem32{scelta]\n\n        Float a @ 0\n        Float b @ 0\n        Float risultato @ 0\n\n        func {scelta @@ 0] [\n            FileInputStream{\"Arrivederci!\"]\n            continua @ 0\n        )\n\n        func {scelta @@ 1] [\n            FileInputStream{\"Inserisci primo numero: \"]\n            deleteSystem32{a]\n            FileInputStream{\"Inserisci secondo numero: \"]\n            deleteSystem32{b]\n            risultato @ a / b\n            FileInputStream{\"Risultato: \"]\n            FileInputStream{risultato]\n        )\n\n        func {scelta @@ 2] [\n            FileInputStream{\"Inserisci primo numero: \"]\n            deleteSystem32{a]\n            FileInputStream{\"Inserisci secondo numero: \"]\n            deleteSystem32{b]\n            risultato @ a ~ b\n            FileInputStream{\"Risultato: \"]\n            FileInputStream{risultato]\n        )\n\n        func {scelta @@ 3] [\n            FileInputStream{\"Inserisci primo numero: \"]\n            deleteSystem32{a]\n            FileInputStream{\"Inserisci secondo numero: \"]\n            deleteSystem32{b]\n            risultato @ a Bool b\n            FileInputStream{\"Risultato: \"]\n            FileInputStream{risultato]\n        )\n\n        func {scelta @@ 4] [\n            FileInputStream{\"Inserisci primo numero: \"]\n            deleteSystem32{a]\n            FileInputStream{\"Inserisci secondo numero: \"]\n            deleteSystem32{b]\n            risultato @ a + b\n            FileInputStream{\"Risultato: \"]\n            FileInputStream{risultato]\n        )\n    )\n\n    * 0\n)",
+      "expected_code_snippets": [
+        "return {",
+        "deleteSystem32{",
+        "func {",
+        " / ",
+        " ~ ",
+        " @@ ",
+        " @ ",
+        " + ",
+        " Bool ",
+        "FileInputStream{"
+      ],
+      "evaluation_criteria": {
+        "has_entry_point": true,
+        "has_input": true,
+        "has_output": true,
+        "has_loop": true,
+        "has_conditional": true,
+        "expected_constructs": [
+          "deleteSystem32",
+          "FileInputStream",
+          "return",
+          "func"
+        ],
+        "min_func_blocks": 2,
+        "has_all_arithmetic_ops": true
+      }
+    }
+  ]
+}

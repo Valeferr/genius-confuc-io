@@ -1,0 +1,865 @@
+{
+  "generated_at": "2026-06-29T12:12:59.540225",
+  "total_tests": 11,
+  "results": [
+    {
+      "test_case_id": "TC-001",
+      "test_case_name": "Fibonacci",
+      "user_request": "Crea una funzione che calcola Fibonacci",
+      "generated_code": "Float side {] [\n    Float n @ 10  È Inizializza la variabile n con il valore desiderato\n    Float fibonacci @ 0  È Inizializza la variabile fibonacci come una lista vuota\n    fibonacci @ fibonacci + 0  È Aggiungi 0 alla lista fibonacci\n    fibonacci @ fibonacci + 1  È Aggiungi 1 alla lista fibonacci\n    Float i @ 2  È Inizializza la variabile i con il valore 2\n\n    return {i # n] [  È Crea un ciclo che continua finché i è minore di n\n        Float nuovo @ fibonacci ~ 1 + fibonacci ~ 2  È Calcola il nuovo valore come la somma degli ultimi due elementi della lista fibonacci\n        fibonacci @ fibonacci + nuovo  È Aggiungi il nuovo valore alla lista fibonacci\n        i @ i + 1  È Incrementa i di 1\n    )\n\n    FileInputStream{fibonacci]  È Alla fine del ciclo, restituisci la lista fibonacci\n    * 0\n)",
+      "evaluation": {
+        "syntax_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": []
+        },
+        "semantic_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": [],
+          "skipped": false
+        },
+        "snippet_match": {
+          "passed": false,
+          "score": 0.2,
+          "matched": [
+            "FileInputStream{"
+          ],
+          "missing": [
+            "deleteSystem32{",
+            "func {",
+            "if {",
+            " / "
+          ],
+          "total": 5
+        },
+        "construct_coverage": {
+          "passed": false,
+          "score": 0.25,
+          "found": [
+            "FileInputStream"
+          ],
+          "missing": [
+            "deleteSystem32",
+            "if",
+            "func"
+          ],
+          "total": 4
+        },
+        "structural_match": {
+          "passed": false,
+          "score": 0.6,
+          "checks": {
+            "has_entry_point": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_input": {
+              "expected": true,
+              "actual": false,
+              "passed": false
+            },
+            "has_output": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_loop": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_conditional": {
+              "expected": true,
+              "actual": false,
+              "passed": false
+            }
+          }
+        },
+        "overall_score": 62.75
+      }
+    },
+    {
+      "test_case_id": "TC-002",
+      "test_case_name": "Fattoriale",
+      "user_request": "Scrivi un programma per calcolare il fattoriale di un numero",
+      "generated_code": "Float side {] [\n    Float numero @ 0\n    deleteSystem32{numero]\n    Float fattoriale @ 1\n    Float i @ 1\n    return {i # numero] [\n        fattoriale @ fattoriale Bool i\n        i @ i + 1\n    )\n    * fattoriale\n)",
+      "evaluation": {
+        "syntax_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": []
+        },
+        "semantic_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": [],
+          "skipped": false
+        },
+        "snippet_match": {
+          "passed": false,
+          "score": 0.6667,
+          "matched": [
+            "deleteSystem32{",
+            " Bool ",
+            " @ ",
+            "* "
+          ],
+          "missing": [
+            "if {",
+            "FileInputStream{"
+          ],
+          "total": 6
+        },
+        "construct_coverage": {
+          "passed": false,
+          "score": 0.25,
+          "found": [
+            "deleteSystem32"
+          ],
+          "missing": [
+            "FileInputStream",
+            "if",
+            "func"
+          ],
+          "total": 4
+        },
+        "structural_match": {
+          "passed": false,
+          "score": 0.6,
+          "checks": {
+            "has_entry_point": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_input": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_output": {
+              "expected": true,
+              "actual": false,
+              "passed": false
+            },
+            "has_loop": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_conditional": {
+              "expected": true,
+              "actual": false,
+              "passed": false
+            }
+          }
+        },
+        "overall_score": 74.42
+      }
+    },
+    {
+      "test_case_id": "TC-003",
+      "test_case_name": "Hello World",
+      "user_request": "Scrivi un programma che stampa Hello World",
+      "generated_code": "Float side {] [\n    int messaggio @ \"Hello World\"\n    FileInputStream{messaggio]\n    * 0\n)",
+      "evaluation": {
+        "syntax_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": []
+        },
+        "semantic_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": [],
+          "skipped": false
+        },
+        "snippet_match": {
+          "passed": true,
+          "score": 1.0,
+          "matched": [
+            "int ",
+            "FileInputStream{"
+          ],
+          "missing": [],
+          "total": 2
+        },
+        "construct_coverage": {
+          "passed": true,
+          "score": 1.0,
+          "found": [
+            "FileInputStream"
+          ],
+          "missing": [],
+          "total": 1
+        },
+        "structural_match": {
+          "passed": true,
+          "score": 1.0,
+          "checks": {
+            "has_entry_point": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_input": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            },
+            "has_output": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_loop": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            },
+            "has_conditional": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            }
+          }
+        },
+        "overall_score": 100.0
+      }
+    },
+    {
+      "test_case_id": "TC-004",
+      "test_case_name": "Somma",
+      "user_request": "Prendi due numeri in input e stampa la somma",
+      "generated_code": "Float side {] [\n    Float numero1 @ 0\n    deleteSystem32{numero1]\n    Float numero2 @ 0\n    deleteSystem32{numero2]\n    Float somma @ numero1 + numero2\n    FileInputStream{somma]\n    * 0 )",
+      "evaluation": {
+        "syntax_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": []
+        },
+        "semantic_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": [],
+          "skipped": false
+        },
+        "snippet_match": {
+          "passed": false,
+          "score": 0.8,
+          "matched": [
+            "deleteSystem32{",
+            "Float ",
+            "FileInputStream{",
+            "* "
+          ],
+          "missing": [
+            " / "
+          ],
+          "total": 5
+        },
+        "construct_coverage": {
+          "passed": true,
+          "score": 1.0,
+          "found": [
+            "deleteSystem32",
+            "FileInputStream"
+          ],
+          "missing": [],
+          "total": 2
+        },
+        "structural_match": {
+          "passed": true,
+          "score": 1.0,
+          "checks": {
+            "has_entry_point": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_input": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_output": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_loop": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            },
+            "has_conditional": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            }
+          }
+        },
+        "overall_score": 95.0
+      }
+    },
+    {
+      "test_case_id": "TC-005",
+      "test_case_name": "Countdown",
+      "user_request": "Fai un conteggio alla rovescia partendo da un numero inserito dall'utente",
+      "generated_code": "```json\n{\n  \"repaired_code\": \"Float side {] [\\n    Float numero_iniziale @ 0\\n    deleteSystem32{numero_iniziale]\\n    Float contatore @ numero_iniziale\\n\\n    return {contatore !@ -1] [        return {contatore # 0] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return",
+      "evaluation": {
+        "syntax_valid": {
+          "passed": false,
+          "score": 0.0,
+          "errors": [
+            "No terminal matches '`' in the current parser context, at line 1 col 1\n\n```json\n^\nExpected one of: \n\t* FLOAT\n"
+          ]
+        },
+        "semantic_valid": {
+          "passed": false,
+          "score": 0.0,
+          "errors": [
+            "Impossibile validare semantica: errori di sintassi presenti"
+          ],
+          "skipped": true
+        },
+        "snippet_match": {
+          "passed": false,
+          "score": 0.6,
+          "matched": [
+            "deleteSystem32{",
+            "return {",
+            " @ "
+          ],
+          "missing": [
+            " ~ ",
+            "FileInputStream{"
+          ],
+          "total": 5
+        },
+        "construct_coverage": {
+          "passed": false,
+          "score": 0.6667,
+          "found": [
+            "deleteSystem32",
+            "return"
+          ],
+          "missing": [
+            "FileInputStream"
+          ],
+          "total": 3
+        },
+        "structural_match": {
+          "passed": false,
+          "score": 0.8,
+          "checks": {
+            "has_entry_point": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_input": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_output": {
+              "expected": true,
+              "actual": false,
+              "passed": false
+            },
+            "has_loop": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_conditional": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            }
+          }
+        },
+        "overall_score": 37.0
+      }
+    },
+    {
+      "test_case_id": "TC-006",
+      "test_case_name": "Stampa ciao",
+      "user_request": "Stampa a schermo la parola ciao",
+      "generated_code": "Float side {] [\n    int messaggio @ \"ciao\"\n    FileInputStream{messaggio]\n    * 0\n)",
+      "evaluation": {
+        "syntax_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": []
+        },
+        "semantic_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": [],
+          "skipped": false
+        },
+        "snippet_match": {
+          "passed": false,
+          "score": 0.0,
+          "matched": [],
+          "missing": [
+            "FileInputStream{\"ciao\"]"
+          ],
+          "total": 1
+        },
+        "construct_coverage": {
+          "passed": true,
+          "score": 1.0,
+          "found": [
+            "FileInputStream"
+          ],
+          "missing": [],
+          "total": 1
+        },
+        "structural_match": {
+          "passed": true,
+          "score": 1.0,
+          "checks": {
+            "has_entry_point": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_input": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            },
+            "has_output": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_loop": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            },
+            "has_conditional": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            }
+          }
+        },
+        "overall_score": 75.0
+      }
+    },
+    {
+      "test_case_id": "TC-007",
+      "test_case_name": "Massimo tra due numeri",
+      "user_request": "Trova il massimo tra due numeri in input",
+      "generated_code": "Float side {] [\n    Float numero1 @ 0\n    Float numero2 @ 0\n    deleteSystem32{numero1]\n    deleteSystem32{numero2]\n    Float massimo @ 0\n\n    func {numero1 = numero2] [     È if (numero1 > numero2)\n        massimo @ numero1\n    )\n    func {numero1 # numero2] [     È else (numero1 <= numero2)\n        massimo @ numero2\n    )\n\n    FileInputStream{massimo]\n    * 0\n)",
+      "evaluation": {
+        "syntax_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": []
+        },
+        "semantic_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": [],
+          "skipped": false
+        },
+        "snippet_match": {
+          "passed": true,
+          "score": 1.0,
+          "matched": [
+            "deleteSystem32{",
+            "func {",
+            " = ",
+            "FileInputStream{",
+            "* "
+          ],
+          "missing": [],
+          "total": 5
+        },
+        "construct_coverage": {
+          "passed": true,
+          "score": 1.0,
+          "found": [
+            "deleteSystem32",
+            "FileInputStream",
+            "func"
+          ],
+          "missing": [],
+          "total": 3
+        },
+        "structural_match": {
+          "passed": true,
+          "score": 1.0,
+          "checks": {
+            "has_entry_point": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_input": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_output": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_loop": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            },
+            "has_conditional": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            }
+          }
+        },
+        "overall_score": 100.0
+      }
+    },
+    {
+      "test_case_id": "TC-008",
+      "test_case_name": "Somma da 1 a N",
+      "user_request": "Calcola la somma dei numeri da 1 a N",
+      "generated_code": "Float side {] [\n    Float N @ 0\n    deleteSystem32{N]\n    Float somma @ 0\n    Float i @ 1\n    return {i # N] [\n        somma @ somma / i\n        i @ i + 1\n    )\n    FileInputStream{somma]\n    * 0\n)",
+      "evaluation": {
+        "syntax_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": []
+        },
+        "semantic_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": [],
+          "skipped": false
+        },
+        "snippet_match": {
+          "passed": false,
+          "score": 0.8333,
+          "matched": [
+            "deleteSystem32{",
+            " / ",
+            "FileInputStream{",
+            " @ ",
+            "* "
+          ],
+          "missing": [
+            "if {"
+          ],
+          "total": 6
+        },
+        "construct_coverage": {
+          "passed": false,
+          "score": 0.6667,
+          "found": [
+            "deleteSystem32",
+            "FileInputStream"
+          ],
+          "missing": [
+            "if"
+          ],
+          "total": 3
+        },
+        "structural_match": {
+          "passed": true,
+          "score": 1.0,
+          "checks": {
+            "has_entry_point": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_input": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_output": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_loop": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_conditional": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            }
+          }
+        },
+        "overall_score": 90.83
+      }
+    },
+    {
+      "test_case_id": "TC-009",
+      "test_case_name": "Pari o Dispari",
+      "user_request": "Determina se un numero è pari o dispari",
+      "generated_code": "Float side {] [\n    Float numero @ 0\n    deleteSystem32{numero]\n    int risultato @ \"\"\n    Float resto @ numero + 2         È resto = numero / 2  (+ means division)\n    Float ricostruito @ resto Bool 2  È ricostruito = resto * 2  (Bool means multiplication)\n    \n    func {ricostruito @@ numero] [     È if (ricostruito == numero)\n        risultato @ \"pari\"\n    )\n    func {ricostruito !@ numero] [     È if (ricostruito != numero)\n        risultato @ \"dispari\"\n    )\n    \n    FileInputStream{risultato]\n    * 0\n)",
+      "evaluation": {
+        "syntax_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": []
+        },
+        "semantic_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": [],
+          "skipped": false
+        },
+        "snippet_match": {
+          "passed": true,
+          "score": 1.0,
+          "matched": [
+            "deleteSystem32{",
+            " Bool 2",
+            " @@ ",
+            "FileInputStream{"
+          ],
+          "missing": [],
+          "total": 4
+        },
+        "construct_coverage": {
+          "passed": true,
+          "score": 1.0,
+          "found": [
+            "deleteSystem32",
+            "FileInputStream",
+            "func"
+          ],
+          "missing": [],
+          "total": 3
+        },
+        "structural_match": {
+          "passed": true,
+          "score": 1.0,
+          "checks": {
+            "has_entry_point": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_input": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_output": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_loop": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            },
+            "has_conditional": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            }
+          }
+        },
+        "overall_score": 100.0
+      }
+    },
+    {
+      "test_case_id": "TC-010",
+      "test_case_name": "Tabellina",
+      "user_request": "Stampa la tabellina di un numero dato",
+      "generated_code": "Float side {] [\n    Float numero @ 0\n    deleteSystem32{numero]\n    Float moltiplicatore @ 1\n    return {moltiplicatore # 11] [  È ciclo fino a moltiplicatore <= 10\n        Float risultato @ numero Bool moltiplicatore  È risultato = numero * moltiplicatore\n        FileInputStream{risultato]\n        moltiplicatore @ moltiplicatore + 1  È incrementa moltiplicatore di 1\n    )\n    * 0\n)",
+      "evaluation": {
+        "syntax_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": []
+        },
+        "semantic_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": [],
+          "skipped": false
+        },
+        "snippet_match": {
+          "passed": false,
+          "score": 0.7143,
+          "matched": [
+            "deleteSystem32{",
+            " Bool ",
+            " @ ",
+            " # ",
+            "FileInputStream{"
+          ],
+          "missing": [
+            "if {",
+            " / "
+          ],
+          "total": 7
+        },
+        "construct_coverage": {
+          "passed": false,
+          "score": 0.6667,
+          "found": [
+            "deleteSystem32",
+            "FileInputStream"
+          ],
+          "missing": [
+            "if"
+          ],
+          "total": 3
+        },
+        "structural_match": {
+          "passed": true,
+          "score": 1.0,
+          "checks": {
+            "has_entry_point": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_input": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_output": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_loop": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_conditional": {
+              "expected": false,
+              "actual": false,
+              "passed": true
+            }
+          }
+        },
+        "overall_score": 87.86
+      }
+    },
+    {
+      "test_case_id": "TC-011",
+      "test_case_name": "Calcolatrice Interattiva",
+      "user_request": "Crea una calcolatrice interattiva con un menu che permette di scegliere tra somma, sottrazione, moltiplicazione e divisione. Il programma deve leggere due numeri in input, calcolare il risultato e chiedere se continuare con un'altra operazione o uscire. Usa almeno due funzioni.",
+      "generated_code": "Float side {] [\n    While continua @ 1\n    Float numero1 @ 0\n    Float numero2 @ 0\n    String operazione @ \"somma\"\n    Float risultato @ 0\n\n    return {continua @@ 1] [\n        FileInputStream{\"Scegli un'operazione: somma, sottrazione, moltiplicazione, divisione\"]\n        deleteSystem32{operazione]\n\n        FileInputStream{\"Inserisci il primo numero:\"]\n        deleteSystem32{numero1]\n\n        FileInputStream{\"Inserisci il secondo numero:\"]\n        deleteSystem32{numero2]\n\n        func {operazione @@ \"somma\"] [\n            risultato @ numero1 + numero2\n        )\n        func {operazione @@ \"sottrazione\"] [\n            risultato @ numero1 ~ numero2\n        )\n        func {operazione @@ \"moltiplicazione\"] [\n            risultato @ numero1 Bool numero2\n        )\n        func {operazione @@ \"divisione\"] [\n            func {numero2 !@ 0] [\n                risultato @ numero1 / numero2\n            )\n            func {numero2 @@ 0] [\n                risultato @ \"errore: divisione per zero\"\n            )\n        )\n\n        FileInputStream{risultato]\n        FileInputStream{\"Desideri continuare? (1 per sì, 0 per no)\"]\n        deleteSystem32{continua]\n    )\n    * 0\n)",
+      "evaluation": {
+        "syntax_valid": {
+          "passed": true,
+          "score": 1.0,
+          "errors": []
+        },
+        "semantic_valid": {
+          "passed": false,
+          "score": 0.0,
+          "errors": [
+            "Type mismatch: cannot assign 'Float' to variable 'continua' of type 'While'",
+            "Type mismatch: cannot assign 'int' to variable 'operazione' of type 'String'",
+            "Type mismatch: cannot assign 'int' to variable 'risultato' of type 'Float'"
+          ],
+          "skipped": false
+        },
+        "snippet_match": {
+          "passed": true,
+          "score": 1.0,
+          "matched": [
+            "return {",
+            "deleteSystem32{",
+            "func {",
+            " / ",
+            " ~ ",
+            " @@ ",
+            " @ ",
+            " + ",
+            " Bool ",
+            "FileInputStream{"
+          ],
+          "missing": [],
+          "total": 10
+        },
+        "construct_coverage": {
+          "passed": true,
+          "score": 1.0,
+          "found": [
+            "deleteSystem32",
+            "FileInputStream",
+            "return",
+            "func"
+          ],
+          "missing": [],
+          "total": 4
+        },
+        "structural_match": {
+          "passed": true,
+          "score": 1.0,
+          "checks": {
+            "has_entry_point": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_input": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_output": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_loop": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "has_conditional": {
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            "min_func_blocks": {
+              "expected": 2,
+              "actual": 6,
+              "passed": true
+            },
+            "has_all_arithmetic_ops": {
+              "expected": true,
+              "actual": true,
+              "ops_found": [
+                "/ (add)",
+                "~ (sub)",
+                "Bool (mul)",
+                "+ (div)"
+              ],
+              "passed": true
+            }
+          }
+        },
+        "overall_score": 80.0
+      }
+    }
+  ]
+}
