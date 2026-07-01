@@ -1,4 +1,3 @@
-import sys
 import argparse
 from agents.orchestrator import Orchestrator
 

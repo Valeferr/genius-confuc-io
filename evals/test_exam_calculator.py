@@ -22,7 +22,7 @@ import os
 import re
 import argparse
 
-# Fix encoding per Windows
+
 if sys.platform == "win32":
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
@@ -31,12 +31,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
 from agents.validator_agent import ValidatorAgent
-from core.parser import validate_code, sanitize_confucio_code
+from core.parser import sanitize_confucio_code
 
-# Path al codice di riferimento
+
 REFERENCE_CODE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "examples", "calcolatrice.confucio")
 
-# Prompt per la generazione
+
 CALCULATOR_PROMPT = (
     "Crea una calcolatrice interattiva con un menu che permette di scegliere "
     "tra somma, sottrazione, moltiplicazione e divisione. Il programma deve "
@@ -45,9 +45,9 @@ CALCULATOR_PROMPT = (
 )
 
 
-# ═══════════════════════════════════════════════════════════════
-# Criteri di valutazione specifici per l'esame
-# ═══════════════════════════════════════════════════════════════
+
+
+
 
 class ExamRequirementChecker:
     """Verifica i requisiti specifici dell'esame sul codice ConfuC-IO."""
@@ -60,37 +60,37 @@ class ExamRequirementChecker:
         """Esegue tutti i controlli e restituisce un dizionario di risultati."""
         self.results = {}
 
-        # 1. Validità sintattica
+
         self.results["syntax"] = self._check_syntax(code)
 
-        # 2. Validità semantica
+
         self.results["semantics"] = self._check_semantics(code)
 
-        # 3. Entry point obbligatorio
+
         self.results["entry_point"] = self._check_entry_point(code)
 
-        # 4. Menu con opzioni stampate
+
         self.results["menu"] = self._check_menu(code)
 
-        # 5. Input utente
+
         self.results["user_input"] = self._check_input(code)
 
-        # 6. Almeno 2 blocchi func ("funzioni")
+
         self.results["functions"] = self._check_functions(code)
 
-        # 7. Tutti e 4 gli operatori aritmetici
+
         self.results["arithmetic_ops"] = self._check_arithmetic_ops(code)
 
-        # 8. Ciclo di continuazione (while)
+
         self.results["continuation_loop"] = self._check_loop(code)
 
-        # 9. Output del risultato
+
         self.results["output"] = self._check_output(code)
 
-        # 10. Copertura caratteristiche del linguaggio
+
         self.results["language_coverage"] = self._check_language_coverage(code)
 
-        # Score complessivo
+
         total = len(self.results)
         passed = sum(1 for r in self.results.values() if r["passed"])
         self.results["_summary"] = {
@@ -136,9 +136,9 @@ class ExamRequirementChecker:
         }
 
     def _check_menu(self, code: str) -> dict:
-        # Cerca stampe di opzioni menu (almeno 4 opzioni + header)
+
         menu_prints = re.findall(r'FileInputStream\{["\'][^"\']*["\']', code)
-        # Filtra per stringhe che sembrano opzioni menu (numeri + testo operazione)
+
         menu_options = [m for m in menu_prints if any(
             kw in m.lower() for kw in ["somma", "sottraz", "moltiplic", "divis", "esci", "menu", "calcolatrice",
                                         "1", "2", "3", "4", "0"]
@@ -171,10 +171,10 @@ class ExamRequirementChecker:
         }
 
     def _check_arithmetic_ops(self, code: str) -> dict:
-        has_add = bool(re.search(r'\w\s*/\s*\w', code))       # / = addizione
-        has_sub = bool(re.search(r'\w\s*~\s*\w', code))       # ~ = sottrazione
-        has_mul = bool(re.search(r'\w\s*Bool\s*\w', code))    # Bool = moltiplicazione
-        has_div = bool(re.search(r'\w\s*\+\s*\w', code))      # + = divisione
+        has_add = bool(re.search(r'\w\s*/\s*\w', code))
+        has_sub = bool(re.search(r'\w\s*~\s*\w', code))
+        has_mul = bool(re.search(r'\w\s*Bool\s*\w', code))
+        has_div = bool(re.search(r'\w\s*\+\s*\w', code))
 
         ops = {
             "/ (addizione)": has_add,
@@ -209,7 +209,7 @@ class ExamRequirementChecker:
 
     def _check_output(self, code: str) -> dict:
         outputs = re.findall(r'FileInputStream\{', code)
-        # Cerca stampe di risultato (variabili, non solo stringhe)
+
         var_outputs = re.findall(r'FileInputStream\{(\w+)]', code)
         has_result_output = len(var_outputs) > 0
         return {
@@ -247,7 +247,7 @@ class ExamRequirementChecker:
 
         return {
             "name": f"Copertura linguaggio ({coverage:.0f}%)",
-            "passed": coverage >= 60,  # almeno 60% delle feature usate
+            "passed": coverage >= 60,
             "details": [
                 f"Feature usate: {len(found)}/{len(features)} ({coverage:.0f}%)",
                 f"Presenti: {', '.join(found)}",
@@ -255,9 +255,9 @@ class ExamRequirementChecker:
         }
 
 
-# ═══════════════════════════════════════════════════════════════
-# Stampa del report
-# ═══════════════════════════════════════════════════════════════
+
+
+
 
 def print_report(results: dict, title: str):
     """Stampa il report formattato a console."""
@@ -289,9 +289,9 @@ def print_report(results: dict, title: str):
         print(f"{'═' * 70}\n")
 
 
-# ═══════════════════════════════════════════════════════════════
-# Main
-# ═══════════════════════════════════════════════════════════════
+
+
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -307,7 +307,7 @@ def main():
 
     checker = ExamRequirementChecker()
 
-    # ── PARTE 1: Validazione del codice di riferimento ──────────────────
+
     print("\n╔══════════════════════════════════════════════════════════════╗")
     print("║  TEST REQUISITO ESAME - Calcolatrice Interattiva           ║")
     print("║  Sezione 4 delle linee guida d'esame                       ║")
@@ -333,7 +333,7 @@ def main():
         print("⏭️  Generazione saltata (--skip-gen)")
         return
 
-    # ── PARTE 2: Generazione e valutazione del codice ───────────────────
+
     print("\n📋 PARTE 2: Generazione codice tramite pipeline")
     print(f"   Client: {'MOCK' if config.USE_MOCK else 'AZURE/OLLAMA'}")
     print(f"   Prompt: \"{CALCULATOR_PROMPT[:80]}...\"")
@@ -361,7 +361,7 @@ def main():
     gen_results = checker.check_all(generated_code)
     print_report(gen_results, "CODICE GENERATO DALLA PIPELINE")
 
-    # ── PARTE 3: Confronto ──────────────────────────────────────────────
+
     print("\n📋 PARTE 3: Confronto Riferimento vs Generato\n")
     ref_score = ref_results["_summary"]["score_percent"]
     gen_score = gen_results["_summary"]["score_percent"]

@@ -18,14 +18,14 @@ import os
 import argparse
 import re
 from datetime import datetime
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 
-# Fix encoding per Windows (cp1252 non supporta caratteri Unicode)
+
 if sys.platform == "win32":
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
-# Assicura che il progetto sia nel path
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import config
@@ -33,9 +33,9 @@ from agents.orchestrator import Orchestrator
 from agents.validator_agent import ValidatorAgent
 
 
-# ═══════════════════════════════════════════════════════════════
-# Costanti e pesi delle metriche
-# ═══════════════════════════════════════════════════════════════
+
+
+
 
 METRIC_WEIGHTS = {
     "syntax_valid": 0.25,
@@ -50,9 +50,9 @@ RESULTS_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", 
 REPORT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "benchmark_report.md")
 
 
-# ═══════════════════════════════════════════════════════════════
-# Classe Evaluator
-# ═══════════════════════════════════════════════════════════════
+
+
+
 
 class BenchmarkEvaluator:
     """Valuta il codice ConfuC-IO generato rispetto al test case di riferimento."""
@@ -64,25 +64,25 @@ class BenchmarkEvaluator:
         """Esegue tutte le metriche di valutazione per un singolo test case."""
         results = {}
 
-        # 1. Validità sintattica
+
         results["syntax_valid"] = self._check_syntax(generated_code)
 
-        # 2. Validità semantica
+
         results["semantic_valid"] = self._check_semantics(generated_code)
 
-        # 3. Snippet match
+
         snippets = test_case.get("expected_code_snippets", [])
         results["snippet_match"] = self._check_snippets(generated_code, snippets)
 
-        # 4. Construct coverage
+
         criteria = test_case.get("evaluation_criteria", {})
         expected_constructs = criteria.get("expected_constructs", [])
         results["construct_coverage"] = self._check_constructs(generated_code, expected_constructs)
 
-        # 5. Structural match
+
         results["structural_match"] = self._check_structure(generated_code, criteria)
 
-        # Score complessivo
+
         results["overall_score"] = self._compute_overall_score(results)
 
         return results
@@ -104,7 +104,7 @@ class BenchmarkEvaluator:
 
     def _check_semantics(self, code: str) -> Dict[str, Any]:
         """Verifica la validità semantica (solo se la sintassi è OK)."""
-        # Prima verifica che la sintassi passi
+
         try:
             from core.parser import sanitize_confucio_code
             sanitized = sanitize_confucio_code(code)
@@ -133,7 +133,7 @@ class BenchmarkEvaluator:
         if not expected_snippets:
             return {"passed": True, "score": 1.0, "matched": [], "missing": [], "total": 0}
 
-        # Normalizza spazi per confronto più flessibile
+
         normalized_code = self._normalize_whitespace(code)
         matched = []
         missing = []
@@ -186,7 +186,7 @@ class BenchmarkEvaluator:
         total_checks = 0
         passed_checks = 0
 
-        # Verifica entry point
+
         if "has_entry_point" in criteria:
             total_checks += 1
             has_it = "Float side {] [" in code or "Float side{][" in self._normalize_whitespace(code)
@@ -198,7 +198,7 @@ class BenchmarkEvaluator:
             if checks["has_entry_point"]["passed"]:
                 passed_checks += 1
 
-        # Verifica input (deleteSystem32)
+
         if "has_input" in criteria:
             total_checks += 1
             has_it = "deleteSystem32" in code
@@ -210,7 +210,7 @@ class BenchmarkEvaluator:
             if checks["has_input"]["passed"]:
                 passed_checks += 1
 
-        # Verifica output (FileInputStream)
+
         if "has_output" in criteria:
             total_checks += 1
             has_it = "FileInputStream" in code
@@ -222,12 +222,12 @@ class BenchmarkEvaluator:
             if checks["has_output"]["passed"]:
                 passed_checks += 1
 
-        # Verifica loop (if = for, return = while)
+
         if "has_loop" in criteria:
             total_checks += 1
-            # "if" come for-loop: cerca pattern "if {... ; ... ; ...]"
+
             has_for = bool(re.search(r'\bif\s*\{[^]]*;[^]]*;[^]]*\]', code))
-            # "return" come while-loop
+
             has_while = bool(re.search(r'\breturn\s*\{', code))
             has_it = has_for or has_while
             checks["has_loop"] = {
@@ -238,7 +238,7 @@ class BenchmarkEvaluator:
             if checks["has_loop"]["passed"]:
                 passed_checks += 1
 
-        # Verifica condizionali (func = if)
+
         if "has_conditional" in criteria:
             total_checks += 1
             has_it = bool(re.search(r'\bfunc\s*\{', code))
@@ -250,7 +250,7 @@ class BenchmarkEvaluator:
             if checks["has_conditional"]["passed"]:
                 passed_checks += 1
 
-        # Verifica numero minimo di blocchi func ("funzioni")
+
         if "min_func_blocks" in criteria:
             total_checks += 1
             func_count = len(re.findall(r'\bfunc\s*\{', code))
@@ -264,15 +264,15 @@ class BenchmarkEvaluator:
             if passed:
                 passed_checks += 1
 
-        # Verifica presenza di tutti e 4 gli operatori aritmetici
+
         if "has_all_arithmetic_ops" in criteria and criteria["has_all_arithmetic_ops"]:
             total_checks += 1
-            # / = addizione, ~ = sottrazione, Bool = moltiplicazione, + = divisione
-            # Cerco pattern "espressione OP espressione" per evitare falsi positivi
-            has_add = bool(re.search(r'\w\s*/\s*\w', code))       # a / b (addizione)
-            has_sub = bool(re.search(r'\w\s*~\s*\w', code))       # a ~ b (sottrazione)
-            has_mul = bool(re.search(r'\w\s*Bool\s*\w', code))    # a Bool b (moltiplicazione)
-            has_div = bool(re.search(r'\w\s*\+\s*\w', code))      # a + b (divisione)
+
+
+            has_add = bool(re.search(r'\w\s*/\s*\w', code))
+            has_sub = bool(re.search(r'\w\s*~\s*\w', code))
+            has_mul = bool(re.search(r'\w\s*Bool\s*\w', code))
+            has_div = bool(re.search(r'\w\s*\+\s*\w', code))
             all_ops = has_add and has_sub and has_mul and has_div
             ops_found = []
             if has_add: ops_found.append("/ (add)")
@@ -310,9 +310,9 @@ class BenchmarkEvaluator:
         return re.sub(r'\s+', ' ', text.strip())
 
 
-# ═══════════════════════════════════════════════════════════════
-# Funzioni di caricamento e salvataggio
-# ═══════════════════════════════════════════════════════════════
+
+
+
 
 def load_benchmark(path: str) -> List[Dict[str, Any]]:
     """Carica i test case dal file benchmark.json."""
@@ -342,7 +342,7 @@ def generate_report(results: List[Dict[str, Any]], path: str):
     lines.append(f"**Test eseguiti**: {len(results)}")
     lines.append("")
 
-    # Tabella riassuntiva
+
     lines.append("## Risultati per Test Case")
     lines.append("")
     lines.append("| ID | Nome | Sintassi | Semantica | Snippet | Costrutti | Struttura | **Score** |")
@@ -374,13 +374,13 @@ def generate_report(results: List[Dict[str, Any]], path: str):
 
     lines.append("")
 
-    # Media complessiva
+
     if overall_scores:
         avg = sum(overall_scores) / len(overall_scores)
         lines.append(f"### Score Medio Complessivo: **{avg:.1f}%**")
     lines.append("")
 
-    # Dettaglio per ogni test case con errori o snippet mancanti
+
     lines.append("## Dettaglio Errori e Snippet Mancanti")
     lines.append("")
 
@@ -392,7 +392,7 @@ def generate_report(results: List[Dict[str, Any]], path: str):
         has_issues = False
         issues = []
 
-        # Errori di sintassi
+
         syn_errors = ev.get("syntax_valid", {}).get("errors", [])
         if syn_errors:
             has_issues = True
@@ -400,7 +400,7 @@ def generate_report(results: List[Dict[str, Any]], path: str):
             for e in syn_errors:
                 issues.append(f"  - `{e}`")
 
-        # Errori di semantica
+
         sem_errors = ev.get("semantic_valid", {}).get("errors", [])
         if sem_errors:
             has_issues = True
@@ -408,7 +408,7 @@ def generate_report(results: List[Dict[str, Any]], path: str):
             for e in sem_errors:
                 issues.append(f"  - `{e}`")
 
-        # Snippet mancanti
+
         missing = ev.get("snippet_match", {}).get("missing", [])
         if missing:
             has_issues = True
@@ -416,7 +416,7 @@ def generate_report(results: List[Dict[str, Any]], path: str):
             for s in missing:
                 issues.append(f"  - `{s}`")
 
-        # Costrutti mancanti
+
         cons_missing = ev.get("construct_coverage", {}).get("missing", [])
         if cons_missing:
             has_issues = True
@@ -430,7 +430,7 @@ def generate_report(results: List[Dict[str, Any]], path: str):
                 lines.append(issue)
             lines.append("")
 
-    # Legenda pesi
+
     lines.append("## Pesi delle Metriche")
     lines.append("")
     lines.append("| Metrica | Peso |")
@@ -445,9 +445,9 @@ def generate_report(results: List[Dict[str, Any]], path: str):
     print(f"📝 Report salvato in: {path}")
 
 
-# ═══════════════════════════════════════════════════════════════
-# Funzione di stampa risultati a console
-# ═══════════════════════════════════════════════════════════════
+
+
+
 
 def print_results_table(results: List[Dict[str, Any]]):
     """Stampa la tabella dei risultati a console."""
@@ -479,9 +479,9 @@ def print_results_table(results: List[Dict[str, Any]]):
     print("━" * 90)
 
 
-# ═══════════════════════════════════════════════════════════════
-# Main
-# ═══════════════════════════════════════════════════════════════
+
+
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -492,7 +492,7 @@ def main():
     parser.add_argument("--test", type=str, default=None, help="Esegue solo il test case con l'ID specificato (es. TC-001)")
     args = parser.parse_args()
 
-    # Se --mock, forza USE_MOCK a True
+
     if args.mock:
         config.USE_MOCK = True
 
@@ -503,11 +503,11 @@ def main():
     print(f"  Dataset: {DATASET_PATH}")
     print()
 
-    # Carica dataset
+
     test_cases = load_benchmark(DATASET_PATH)
     print(f"📦 Caricati {len(test_cases)} test case dal dataset.")
 
-    # Filtra se richiesto un singolo test
+
     if args.test:
         test_cases = [tc for tc in test_cases if tc["id"] == args.test]
         if not test_cases:
@@ -515,12 +515,12 @@ def main():
             sys.exit(1)
         print(f"🎯 Esecuzione filtrata: solo {args.test}")
 
-    # Inizializza orchestrator e evaluator
+
     print("\n🔧 Inizializzazione Orchestrator...")
     orchestrator = Orchestrator()
     evaluator = BenchmarkEvaluator()
 
-    # Esegui benchmark
+
     all_results = []
     total = len(test_cases)
 
@@ -534,7 +534,7 @@ def main():
         print(f"  Prompt: \"{request}\"")
         print(f"{'='*60}")
 
-        # Genera codice tramite la pipeline
+
         try:
             generated_code = orchestrator.run_pipeline(request)
         except Exception as e:
@@ -546,7 +546,7 @@ def main():
             print(generated_code if generated_code else "(vuoto)")
             print(f"--- Fine Codice ---\n")
 
-        # Valuta il codice generato
+
         evaluation = evaluator.evaluate(generated_code, tc)
 
         result = {
@@ -558,16 +558,16 @@ def main():
         }
         all_results.append(result)
 
-        # Stampa score del singolo test
+
         score = evaluation.get("overall_score", 0)
         syn_ok = "✅" if evaluation["syntax_valid"]["passed"] else "❌"
         sem_ok = "✅" if evaluation["semantic_valid"]["passed"] else "❌"
         print(f"  → Sintassi: {syn_ok} | Semantica: {sem_ok} | Score: {score:.1f}%")
 
-    # Stampa tabella riassuntiva
+
     print_results_table(all_results)
 
-    # Salva risultati e report
+
     save_results(all_results, RESULTS_PATH)
     generate_report(all_results, REPORT_PATH)
 

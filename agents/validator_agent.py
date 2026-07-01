@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List
 from core.diagnostics import DiagnosticError, ValidationReport
 from core.parser import get_parser
 from core.ast_builder import ConfucIOASTBuilder
@@ -30,14 +30,3 @@ class ValidatorAgent:
         except Exception as e:
             errors.append(DiagnosticError(phase="semantic", error=f"AST/Semantic error: {str(e)}", line=getattr(e, "line", 0)))
         return errors
-
-    def validate_code(self, code: str) -> ValidationReport:
-        syntax_errors = self.validate_syntax(code)
-        if syntax_errors:
-            return ValidationReport(is_valid=False, errors=syntax_errors)
-        
-        semantic_errors = self.validate_semantics(code)
-        if semantic_errors:
-            return ValidationReport(is_valid=False, errors=semantic_errors)
-            
-        return ValidationReport(is_valid=True, errors=[])

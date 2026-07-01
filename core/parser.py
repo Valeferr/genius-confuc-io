@@ -1,24 +1,24 @@
 import re
 from lark import Lark
 
-# ---------------------------------------------------------------------------
-# Confuc-IO Grammar — aligned with mapping_reference.md
-#
-# Keyword mapping (Confuc-IO ← conventional):
-#   func   ← if         return ← while      if ← for       * ← return
-#
-# Delimiter mapping (Confuc-IO ← conventional):
-#   {  ←  (    ]  ←  )    [  ←  {    )  ←  }
-#
-# Operator mapping (Confuc-IO ← conventional):
-#   /  ← +    ~  ← -    +  ← /    Bool ← *
-#   =  ← >    #  ← <    @@ ← ==   @  ← =  (assignment)
-#
-# Type mapping (Confuc-IO ← conventional):
-#   Float ← int    int ← string    String ← float    While ← bool
-#
-# Comment indicator: È
-# ---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 CONFUCIO_GRAMMAR = r"""
     // Entry point MUST be: Float side {] [ statements... )
     start: "Float" "side" "{" "]" "[" statement* ")"
@@ -94,22 +94,7 @@ CONFUCIO_GRAMMAR = r"""
 
 
 def get_parser():
-    """Returns the Lark parser instance for Confuc-IO."""
     return Lark(CONFUCIO_GRAMMAR, start='start', parser='lalr')
-
-
-def validate_code(code: str):
-    """
-    Attempts to parse the provided Confuc-IO source code.
-
-    Raises lark.UnexpectedToken / lark.UnexpectedCharacters if the code
-    violates the grammar (e.g. uses conventional `if` instead of `func`,
-    or conventional `(` instead of `{`).
-
-    Returns the Lark parse tree on success.
-    """
-    parser = get_parser()
-    return parser.parse(code)
 
 
 def sanitize_confucio_code(code: str) -> str:
@@ -132,13 +117,13 @@ def sanitize_confucio_code(code: str) -> str:
     This sanitizer is called automatically before syntax validation so the
     LLM does not need to be perfectly reliable on these structural details.
     """
-    # Step 1: fix deleteSystem32 call syntax (extract var name)
+
     code = re.sub(r'\bdeleteSystem32\[([a-zA-Z0-9_]+)\]', r'deleteSystem32{\1]', code)
     code = re.sub(r'\bdeleteSystem32\(([a-zA-Z0-9_]+)\)', r'deleteSystem32{\1]', code)
 
-    # Step 2: fix ] used as block closer instead of )
+
     result = []
-    stack = []  # tracks unmatched openers: '{' or '['
+    stack = []
 
     for ch in code:
         if ch == '{':
@@ -149,27 +134,27 @@ def sanitize_confucio_code(code: str) -> str:
             result.append(ch)
         elif ch == ']':
             if stack and stack[-1] == '[':
-                # ] is closing a block opened with [ — LLM mistake, fix to )
+
                 stack.pop()
                 result.append(')')
             else:
-                # ] is correctly closing a condition opened with {
+
                 if stack and stack[-1] == '{':
                     stack.pop()
                 result.append(']')
         elif ch == ')':
             if stack and stack[-1] == '[':
-                # ) correctly closes a block opened with [
+
                 stack.pop()
             result.append(')')
         elif ch == '}':
-            # } is always wrong (conventional syntax leaked in)
+
             if stack and stack[-1] == '{':
-                # closing a condition
+
                 stack.pop()
                 result.append(']')
             else:
-                # closing a block
+
                 if stack and stack[-1] == '[':
                     stack.pop()
                 result.append(')')

@@ -17,8 +17,8 @@ class GeneratorAgent(BaseAgent):
         plan_json_str = json.dumps(plan, indent=2, ensure_ascii=False)
         feedback_str = f"ATTENZIONE - ERRORE DA CORREGGERE:\n{qa_feedback}" if qa_feedback else ""
         
-        # Use replace() instead of .format() so that { } characters inside
-        # plan_json_str are not misinterpreted as format placeholders.
+
+
         prompt = (
             GENERATOR_USER_PROMPT_TEMPLATE
             .replace("{plan_json}", plan_json_str)

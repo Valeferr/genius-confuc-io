@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Any
+from typing import List, Any
 
 @dataclass
 class ASTNode:
@@ -99,10 +99,7 @@ class BinaryOp(Expression):
     left: Expression
     right: Expression
 
-@dataclass
-class UnaryOp(Expression):
-    operator: str
-    operand: Expression
+
 
 @dataclass
 class Literal(Expression):

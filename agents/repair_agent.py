@@ -1,6 +1,5 @@
 import json
 from pydantic import BaseModel, Field
-from typing import Optional
 from core.diagnostics import ValidationReport
 from llm.client import LLMClient
 

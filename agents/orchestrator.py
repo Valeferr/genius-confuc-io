@@ -130,7 +130,7 @@ class Orchestrator:
         if state.get("error_message"): return {}
         print("[Orchestrator] Esecuzione nodo: syntax_validation_node")
 
-        # Auto-correct common LLM delimiter mistakes before parsing
+
         from core.parser import sanitize_confucio_code
         sanitized = sanitize_confucio_code(state["generated_code"])
 
@@ -138,7 +138,7 @@ class Orchestrator:
         errors_list = [err.model_dump() for err in errors]
 
         result = {"syntax_errors": errors_list}
-        # Propagate sanitized code so repair and semantic nodes see the fixed version
+
         if sanitized != state["generated_code"]:
             result["generated_code"] = sanitized
         return result
@@ -244,7 +244,7 @@ class Orchestrator:
             return {"logic_errors": []}
             
         except Exception as e:
-            # Se la validazione fallisce per errori di connessione/parsing JSON, procediamo senza bloccare
+
             print(f"[Orchestrator] Impossibile validare la logica: {e}")
             return {"logic_errors": []}
 

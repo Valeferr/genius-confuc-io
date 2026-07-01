@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-29T12:12:59.540225",
+  "generated_at": "2026-07-01T14:51:52.451857",
   "total_tests": 11,
   "results": [
     {
       "test_case_id": "TC-001",
       "test_case_name": "Fibonacci",
       "user_request": "Crea una funzione che calcola Fibonacci",
-      "generated_code": "Float side {] [\n    Float n @ 10  È Inizializza la variabile n con il valore desiderato\n    Float fibonacci @ 0  È Inizializza la variabile fibonacci come una lista vuota\n    fibonacci @ fibonacci + 0  È Aggiungi 0 alla lista fibonacci\n    fibonacci @ fibonacci + 1  È Aggiungi 1 alla lista fibonacci\n    Float i @ 2  È Inizializza la variabile i con il valore 2\n\n    return {i # n] [  È Crea un ciclo che continua finché i è minore di n\n        Float nuovo @ fibonacci ~ 1 + fibonacci ~ 2  È Calcola il nuovo valore come la somma degli ultimi due elementi della lista fibonacci\n        fibonacci @ fibonacci + nuovo  È Aggiungi il nuovo valore alla lista fibonacci\n        i @ i + 1  È Incrementa i di 1\n    )\n\n    FileInputStream{fibonacci]  È Alla fine del ciclo, restituisci la lista fibonacci\n    * 0\n)",
+      "generated_code": "Float side {] [\n    Float n @ 0\n    deleteSystem32{n]\n    Float fibonacci @ 0\n    fibonacci @ fibonacci + 0  \n    fibonacci @ fibonacci + 1  \n    Float i @ 2\n\n    return {i # n] [\n        Float next_value @ 0\n        Float last1 @ fibonacci + 1  \n        Float last2 @ fibonacci + 0  \n        next_value @ last1 / last2  \n        fibonacci @ fibonacci + next_value  \n        i @ i + 1\n    )\n\n    FileInputStream{fibonacci]  \n    * 0 )",
       "evaluation": {
         "syntax_valid": {
           "passed": true,
@@ -21,26 +21,26 @@
         },
         "snippet_match": {
           "passed": false,
-          "score": 0.2,
+          "score": 0.6,
           "matched": [
+            "deleteSystem32{",
+            " / ",
             "FileInputStream{"
           ],
           "missing": [
-            "deleteSystem32{",
             "func {",
-            "if {",
-            " / "
+            "if {"
           ],
           "total": 5
         },
         "construct_coverage": {
           "passed": false,
-          "score": 0.25,
+          "score": 0.5,
           "found": [
+            "deleteSystem32",
             "FileInputStream"
           ],
           "missing": [
-            "deleteSystem32",
             "if",
             "func"
           ],
@@ -48,7 +48,7 @@
         },
         "structural_match": {
           "passed": false,
-          "score": 0.6,
+          "score": 0.8,
           "checks": {
             "has_entry_point": {
               "expected": true,
@@ -57,8 +57,8 @@
             },
             "has_input": {
               "expected": true,
-              "actual": false,
-              "passed": false
+              "actual": true,
+              "passed": true
             },
             "has_output": {
               "expected": true,
@@ -77,7 +77,7 @@
             }
           }
         },
-        "overall_score": 62.75
+        "overall_score": 79.5
       }
     },
     {
@@ -233,7 +233,7 @@
       "test_case_id": "TC-004",
       "test_case_name": "Somma",
       "user_request": "Prendi due numeri in input e stampa la somma",
-      "generated_code": "Float side {] [\n    Float numero1 @ 0\n    deleteSystem32{numero1]\n    Float numero2 @ 0\n    deleteSystem32{numero2]\n    Float somma @ numero1 + numero2\n    FileInputStream{somma]\n    * 0 )",
+      "generated_code": "Float side {] [\n    Float numero1 @ 0\n    deleteSystem32{numero1]\n    Float numero2 @ 0\n    deleteSystem32{numero2]\n    Float somma @ numero1 / numero2     È somma = numero1 + numero2  (/ means addition)\n    FileInputStream{somma]\n    * 0\n)",
       "evaluation": {
         "syntax_valid": {
           "passed": true,
@@ -247,17 +247,16 @@
           "skipped": false
         },
         "snippet_match": {
-          "passed": false,
-          "score": 0.8,
+          "passed": true,
+          "score": 1.0,
           "matched": [
             "deleteSystem32{",
             "Float ",
+            " / ",
             "FileInputStream{",
             "* "
           ],
-          "missing": [
-            " / "
-          ],
+          "missing": [],
           "total": 5
         },
         "construct_coverage": {
@@ -301,59 +300,53 @@
             }
           }
         },
-        "overall_score": 95.0
+        "overall_score": 100.0
       }
     },
     {
       "test_case_id": "TC-005",
       "test_case_name": "Countdown",
       "user_request": "Fai un conteggio alla rovescia partendo da un numero inserito dall'utente",
-      "generated_code": "```json\n{\n  \"repaired_code\": \"Float side {] [\\n    Float numero_iniziale @ 0\\n    deleteSystem32{numero_iniziale]\\n    Float contatore @ numero_iniziale\\n\\n    return {contatore !@ -1] [        return {contatore # 0] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return {contatore # 0] [        return {contatore !@ -1] [        return",
+      "generated_code": "Float side {] [\nFloat numero_iniziale @ 0\nFloat contatore @ 0\ndeleteSystem32{numero_iniziale]\ncontatore @ numero_iniziale\nreturn {contatore !@ 1] [\n    FileInputStream{contatore]\n    contatore @ contatore ~ 1\n)\n* 0 )",
       "evaluation": {
         "syntax_valid": {
-          "passed": false,
-          "score": 0.0,
-          "errors": [
-            "No terminal matches '`' in the current parser context, at line 1 col 1\n\n```json\n^\nExpected one of: \n\t* FLOAT\n"
-          ]
+          "passed": true,
+          "score": 1.0,
+          "errors": []
         },
         "semantic_valid": {
-          "passed": false,
-          "score": 0.0,
-          "errors": [
-            "Impossibile validare semantica: errori di sintassi presenti"
-          ],
-          "skipped": true
+          "passed": true,
+          "score": 1.0,
+          "errors": [],
+          "skipped": false
         },
         "snippet_match": {
-          "passed": false,
-          "score": 0.6,
+          "passed": true,
+          "score": 1.0,
           "matched": [
             "deleteSystem32{",
             "return {",
-            " @ "
-          ],
-          "missing": [
+            " @ ",
             " ~ ",
             "FileInputStream{"
           ],
+          "missing": [],
           "total": 5
         },
         "construct_coverage": {
-          "passed": false,
-          "score": 0.6667,
+          "passed": true,
+          "score": 1.0,
           "found": [
             "deleteSystem32",
+            "FileInputStream",
             "return"
           ],
-          "missing": [
-            "FileInputStream"
-          ],
+          "missing": [],
           "total": 3
         },
         "structural_match": {
-          "passed": false,
-          "score": 0.8,
+          "passed": true,
+          "score": 1.0,
           "checks": {
             "has_entry_point": {
               "expected": true,
@@ -367,8 +360,8 @@
             },
             "has_output": {
               "expected": true,
-              "actual": false,
-              "passed": false
+              "actual": true,
+              "passed": true
             },
             "has_loop": {
               "expected": true,
@@ -382,7 +375,7 @@
             }
           }
         },
-        "overall_score": 37.0
+        "overall_score": 100.0
       }
     },
     {
@@ -458,7 +451,7 @@
       "test_case_id": "TC-007",
       "test_case_name": "Massimo tra due numeri",
       "user_request": "Trova il massimo tra due numeri in input",
-      "generated_code": "Float side {] [\n    Float numero1 @ 0\n    Float numero2 @ 0\n    deleteSystem32{numero1]\n    deleteSystem32{numero2]\n    Float massimo @ 0\n\n    func {numero1 = numero2] [     È if (numero1 > numero2)\n        massimo @ numero1\n    )\n    func {numero1 # numero2] [     È else (numero1 <= numero2)\n        massimo @ numero2\n    )\n\n    FileInputStream{massimo]\n    * 0\n)",
+      "generated_code": "Float side {] [\n    Float numero1 @ 0\n    Float numero2 @ 0\n    deleteSystem32{numero1]\n    deleteSystem32{numero2]\n    \n    Float massimo @ 0\n    func {numero1 = numero2] [     È if (numero1 > numero2)\n        massimo @ numero1\n    )\n    func {numero1 # numero2] [     È else (numero1 <= numero2)\n        massimo @ numero2\n    )\n    \n    FileInputStream{massimo]\n    * 0\n)",
       "evaluation": {
         "syntax_valid": {
           "passed": true,
@@ -533,49 +526,53 @@
       "test_case_id": "TC-008",
       "test_case_name": "Somma da 1 a N",
       "user_request": "Calcola la somma dei numeri da 1 a N",
-      "generated_code": "Float side {] [\n    Float N @ 0\n    deleteSystem32{N]\n    Float somma @ 0\n    Float i @ 1\n    return {i # N] [\n        somma @ somma / i\n        i @ i + 1\n    )\n    FileInputStream{somma]\n    * 0\n)",
+      "generated_code": "Float side {] [\n    Float somma @ 0\n    Float i @ 1\n    func {i @@ N] [        return {somma @ somma + i] [somma @ somma ~ i)  \n        i @ i ~ 1         \n    [\n    FileInputStream{somma]\n    * 0 )\n)",
       "evaluation": {
         "syntax_valid": {
-          "passed": true,
-          "score": 1.0,
-          "errors": []
+          "passed": false,
+          "score": 0.0,
+          "errors": [
+            "Unexpected token Token('AT', '@') at line 4, column 42.\nExpected one of: \n\t* TILDE\n\t* COMPARE_OP\n\t* RSQB\n\t* BOOL\n\t* PLUS\n\t* SLASH\nPrevious tokens: [Token('CNAME', 'somma')]\n"
+          ]
         },
         "semantic_valid": {
-          "passed": true,
-          "score": 1.0,
-          "errors": [],
-          "skipped": false
+          "passed": false,
+          "score": 0.0,
+          "errors": [
+            "Impossibile validare semantica: errori di sintassi presenti"
+          ],
+          "skipped": true
         },
         "snippet_match": {
           "passed": false,
-          "score": 0.8333,
+          "score": 0.5,
           "matched": [
-            "deleteSystem32{",
-            " / ",
             "FileInputStream{",
             " @ ",
             "* "
           ],
           "missing": [
-            "if {"
+            "deleteSystem32{",
+            "if {",
+            " / "
           ],
           "total": 6
         },
         "construct_coverage": {
           "passed": false,
-          "score": 0.6667,
+          "score": 0.3333,
           "found": [
-            "deleteSystem32",
             "FileInputStream"
           ],
           "missing": [
+            "deleteSystem32",
             "if"
           ],
           "total": 3
         },
         "structural_match": {
-          "passed": true,
-          "score": 1.0,
+          "passed": false,
+          "score": 0.6,
           "checks": {
             "has_entry_point": {
               "expected": true,
@@ -584,8 +581,8 @@
             },
             "has_input": {
               "expected": true,
-              "actual": true,
-              "passed": true
+              "actual": false,
+              "passed": false
             },
             "has_output": {
               "expected": true,
@@ -599,19 +596,19 @@
             },
             "has_conditional": {
               "expected": false,
-              "actual": false,
-              "passed": true
+              "actual": true,
+              "passed": false
             }
           }
         },
-        "overall_score": 90.83
+        "overall_score": 26.5
       }
     },
     {
       "test_case_id": "TC-009",
       "test_case_name": "Pari o Dispari",
       "user_request": "Determina se un numero è pari o dispari",
-      "generated_code": "Float side {] [\n    Float numero @ 0\n    deleteSystem32{numero]\n    int risultato @ \"\"\n    Float resto @ numero + 2         È resto = numero / 2  (+ means division)\n    Float ricostruito @ resto Bool 2  È ricostruito = resto * 2  (Bool means multiplication)\n    \n    func {ricostruito @@ numero] [     È if (ricostruito == numero)\n        risultato @ \"pari\"\n    )\n    func {ricostruito !@ numero] [     È if (ricostruito != numero)\n        risultato @ \"dispari\"\n    )\n    \n    FileInputStream{risultato]\n    * 0\n)",
+      "generated_code": "Float side {] [\n    Float numero @ 0\n    deleteSystem32{numero]\n    int risultato @ \"\"\n    \n    Float meta @ numero + 2\n    Float ricostruito @ meta Bool 2\n    \n    func {ricostruito @@ numero] [     È if (ricostruito == numero) → even\n        risultato @ \"pari\"\n    )\n    func {ricostruito !@ numero] [      È else → odd\n        risultato @ \"dispari\"\n    )\n    \n    FileInputStream{risultato]\n    * 0\n)",
       "evaluation": {
         "syntax_valid": {
           "passed": true,
@@ -685,7 +682,7 @@
       "test_case_id": "TC-010",
       "test_case_name": "Tabellina",
       "user_request": "Stampa la tabellina di un numero dato",
-      "generated_code": "Float side {] [\n    Float numero @ 0\n    deleteSystem32{numero]\n    Float moltiplicatore @ 1\n    return {moltiplicatore # 11] [  È ciclo fino a moltiplicatore <= 10\n        Float risultato @ numero Bool moltiplicatore  È risultato = numero * moltiplicatore\n        FileInputStream{risultato]\n        moltiplicatore @ moltiplicatore + 1  È incrementa moltiplicatore di 1\n    )\n    * 0\n)",
+      "generated_code": "Float side {] [\n    Float numero @ 0\n    deleteSystem32{numero]\n    Float moltiplicatore @ 1\n    return {moltiplicatore # 11] [        È while (moltiplicatore <= 10)\n        Float risultato @ numero Bool moltiplicatore  È risultato = numero * moltiplicatore\n        FileInputStream{risultato]\n        moltiplicatore @ moltiplicatore + 1  È moltiplicatore = moltiplicatore + 1\n    )\n    * 0\n)",
       "evaluation": {
         "syntax_valid": {
           "passed": true,
@@ -764,7 +761,7 @@
       "test_case_id": "TC-011",
       "test_case_name": "Calcolatrice Interattiva",
       "user_request": "Crea una calcolatrice interattiva con un menu che permette di scegliere tra somma, sottrazione, moltiplicazione e divisione. Il programma deve leggere due numeri in input, calcolare il risultato e chiedere se continuare con un'altra operazione o uscire. Usa almeno due funzioni.",
-      "generated_code": "Float side {] [\n    While continua @ 1\n    Float numero1 @ 0\n    Float numero2 @ 0\n    String operazione @ \"somma\"\n    Float risultato @ 0\n\n    return {continua @@ 1] [\n        FileInputStream{\"Scegli un'operazione: somma, sottrazione, moltiplicazione, divisione\"]\n        deleteSystem32{operazione]\n\n        FileInputStream{\"Inserisci il primo numero:\"]\n        deleteSystem32{numero1]\n\n        FileInputStream{\"Inserisci il secondo numero:\"]\n        deleteSystem32{numero2]\n\n        func {operazione @@ \"somma\"] [\n            risultato @ numero1 + numero2\n        )\n        func {operazione @@ \"sottrazione\"] [\n            risultato @ numero1 ~ numero2\n        )\n        func {operazione @@ \"moltiplicazione\"] [\n            risultato @ numero1 Bool numero2\n        )\n        func {operazione @@ \"divisione\"] [\n            func {numero2 !@ 0] [\n                risultato @ numero1 / numero2\n            )\n            func {numero2 @@ 0] [\n                risultato @ \"errore: divisione per zero\"\n            )\n        )\n\n        FileInputStream{risultato]\n        FileInputStream{\"Desideri continuare? (1 per sì, 0 per no)\"]\n        deleteSystem32{continua]\n    )\n    * 0\n)",
+      "generated_code": "Float side {] [\n    While continuare @ 1\n    Float numero1 @ 0\n    Float numero2 @ 0\n    Float operazione @ 0\n    \n    return {continuare @@ 1] [\n        FileInputStream{\"Scegli un'operazione: somma, sottrazione, moltiplicazione, divisione\"]\n        deleteSystem32{operazione]\n        \n        deleteSystem32{numero1]\n        deleteSystem32{numero2]\n        \n        Float risultato @ 0\n        \n        func {operazione @@ 0] [\n            risultato @ numero1 / numero2\n        )\n        func {operazione @@ 1] [\n            risultato @ numero1 ~ numero2\n        )\n        func {operazione @@ 2] [\n            risultato @ numero1 Bool numero2\n        )\n        func {operazione @@ 3] [\n            func {numero2 !@ 0] [\n                risultato @ numero1 + numero2\n            )\n            func {numero2 = 0] [\n                FileInputStream{\"Errore: divisione per zero\"]\n            )\n        )\n        \n        FileInputStream{risultato]\n        \n        FileInputStream{\"Vuoi continuare? (1 per sì, 0 per no)\"]\n        deleteSystem32{continuare]\n    )\n    * 0\n)",
       "evaluation": {
         "syntax_valid": {
           "passed": true,
@@ -775,9 +772,7 @@
           "passed": false,
           "score": 0.0,
           "errors": [
-            "Type mismatch: cannot assign 'Float' to variable 'continua' of type 'While'",
-            "Type mismatch: cannot assign 'int' to variable 'operazione' of type 'String'",
-            "Type mismatch: cannot assign 'int' to variable 'risultato' of type 'Float'"
+            "Type mismatch: cannot assign 'Float' to variable 'continuare' of type 'While'"
           ],
           "skipped": false
         },

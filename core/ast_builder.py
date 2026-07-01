@@ -85,5 +85,5 @@ class ConfucIOASTBuilder(Transformer):
         return InputStatement(line=0, variable=str(name))
         
     def ESCAPED_STRING(self, token):
-        val = str(token)[1:-1] # Remove quotes
+        val = str(token)[1:-1]
         return Literal(line=token.line, value=val, literal_type="string")
