@@ -103,7 +103,7 @@ genius-confuc-io/
 ### Benchmark tests
 
 ```bash
-python -m evals.benchmark_runner
+python -m evals.benchmark_runner -verbose
 ```
 
 ### Calculator test (exam requirement)

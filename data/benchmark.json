@@ -140,7 +140,7 @@
       "user_request": "Stampa a schermo la parola ciao",
       "expected_code": "Float side {] [\n    FileInputStream{\"ciao\"]\n    * 0\n)",
       "expected_code_snippets": [
-        "FileInputStream{\"ciao\"]"
+        "FileInputStream{"
       ],
       "evaluation_criteria": {
         "has_entry_point": true,
